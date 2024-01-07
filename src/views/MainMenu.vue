@@ -2,8 +2,8 @@
   <main>
     <header>
       <div class="actionButtons">
-        <ImageButton class="account" type="button" @click="accountButtonClicked" image-url="./images/account_circle_FILL0_wght400_GRAD0_opsz24.svg"></ImageButton>
-        <ImageButton class="back" type="button" image-url="../../public/images/logout_FILL0_wght400_GRAD0_opsz24.svg"></ImageButton>
+        <ImageButton class="account" type="button" @click="accountButtonClicked" image-url="/images/account_circle_FILL0_wght400_GRAD0_opsz24.svg"></ImageButton>
+        <ImageButton class="back" type="button" image-url="/images/logout_FILL0_wght400_GRAD0_opsz24.svg"></ImageButton>
       </div>
       <div class="title">
         <h1>BATTLE<br>ARENA</h1>
