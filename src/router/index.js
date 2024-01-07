@@ -10,6 +10,10 @@ import CreateAttack from "../views/CreateAttack.vue";
 import Store from "../views/Store.vue";
 import SellAttack from "../views/SellAttack.vue";
 import BuyAttack from "../views/BuyAttack.vue";
+import Account from "../views/Account.vue";
+import Backpack from "../views/Backpack.vue";
+import Ranking from "../views/Ranking.vue";
+import OtherAccount from "../views/OtherAccount.vue";
 
 const routes = [
     {
@@ -62,6 +66,26 @@ const routes = [
         path: '/store/buyattack',
         name: 'buy attack',
         component: BuyAttack,
+    },
+    {
+        path: '/account',
+        name: 'account',
+        component: Account,
+    },
+    {
+        path: '/account/backpack',
+        name: 'backpack',
+        component: Backpack,
+    },
+    {
+        path: '/ranking',
+        name: 'ranking',
+        component: Ranking,
+    },
+    {
+        path: '/otheraccount',
+        name: 'other account',
+        component: OtherAccount,
     },
 ]
 

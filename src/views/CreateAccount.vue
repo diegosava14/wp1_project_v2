@@ -23,13 +23,14 @@
         </div>
       </div>
       <div class="buttons">
-        <button type="button" @click="createButtonClicked">CREATE</button>
+        <CustomButton type="button" @click="createButtonClicked">CREATE</CustomButton>
       </div>
     </article>
   </main>
 </template>
 
 <script setup>
+import CustomButton from './components/CustomButton.vue';
 import axios from 'axios';
 import { registerAPI } from '../services/api.js';
 import { ref } from 'vue';
