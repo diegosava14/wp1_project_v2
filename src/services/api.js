@@ -54,5 +54,34 @@ async function registerAPI(username, password, img) {
     }
 }
 
+async function getBuyableAttacks() {
+    try {
+        const attacksURL = `${url}/shop/attacks`;
 
-export { loginAPI, registerAPI };
+        const response = await axios.get(attacksURL);
+
+        return response.data;
+    } catch (error) {
+        if (error.response) {
+            // The request was made and the server responded with a status code
+            // other than 2xx (success).
+            console.error('Server responded with non-success status:', error.response.status);
+            console.error('Response data:', error.response.data);
+            console.error('Response headers:', error.response.headers);
+        } else if (error.request) {
+            // The request was made but no response was received.
+            console.error('No response received from the server.');
+        } else {
+            // Something happened in setting up the request that triggered an Error.
+            console.error('Error setting up the request:', error.message);
+        }
+
+        throw error;
+    }
+}
+
+// Example usage:
+// getBuyableAttacks().then(attacks => console.log(attacks))
+
+
+export { loginAPI, registerAPI, getBuyableAttacks };

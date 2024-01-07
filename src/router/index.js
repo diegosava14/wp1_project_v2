@@ -6,6 +6,10 @@ import Basket from '../views/examples/Basket.vue'
 import Title from '../views/Title.vue'
 import MainMenu from '../views/MainMenu.vue'
 import CreateAccount from '../views/CreateAccount.vue'
+import CreateAttack from "../views/CreateAttack.vue";
+import Store from "../views/Store.vue";
+import SellAttack from "../views/SellAttack.vue";
+import BuyAttack from "../views/BuyAttack.vue";
 
 const routes = [
     {
@@ -38,7 +42,27 @@ const routes = [
         path: '/createaccount',
         name: 'create account',
         component: CreateAccount,
-    }
+    },
+    {
+        path: '/store',
+        name: 'store',
+        component: Store,
+    },
+    {
+        path: '/store/createattack',
+        name: 'create attack',
+        component: CreateAttack,
+    },
+    {
+        path: '/store/sellattack',
+        name: 'sell attack',
+        component: SellAttack,
+    },
+    {
+        path: '/store/buyattack',
+        name: 'buy attack',
+        component: BuyAttack,
+    },
 ]
 
 const router = createRouter({

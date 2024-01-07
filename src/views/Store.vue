@@ -1,45 +1,50 @@
 <template>
-  <main>
-    <header>
-      <div class="actionButtons">
-        <ImageButton class="account" type="button" image-url="./images/account_circle_FILL0_wght400_GRAD0_opsz24.svg"></ImageButton>
-        <ImageButton class="back" type="button" image-url="../../public/images/logout_FILL0_wght400_GRAD0_opsz24.svg"></ImageButton>
-      </div>
-      <div class="title">
-        <h1>BATTLE<br>ARENA</h1>
-      </div>
-    </header>
-    <article>
-      <div class="buttons">
-        <CustomButton type="button">PLAY</CustomButton>
-        <CustomButton type="button">GAME FINDER</CustomButton>
-        <CustomButton type="button">CREATE GAME</CustomButton>
-        <CustomButton type="button">RANKING</CustomButton>
-        <CustomButton type="button" @click="storeButtonClicked">STORE</CustomButton>
-      </div>
-    </article>
-  </main>
+  <html>
+  <body>
+  <div class="container">
+    <div class="actionButtons">
+      <ImageButton class="account" type="button" image-url="./images/account_circle_FILL0_wght400_GRAD0_opsz24.svg"></ImageButton>
+    </div>
+    <div class="title">
+      <h1>STORE</h1>
+    </div>
+    <div class="buttons">
+      <CustomButton type="button" @click="createAttackButtonClicked">CREATE ATTACK</CustomButton>
+      <CustomButton type="button" @click="buyButtonClicked">BUY ATTACK</CustomButton>
+      <CustomButton type="button" @click="sellButtonClicked">SELL ATTACK</CustomButton>
+    </div>
+  </div>
+  </body>
+  </html>
 </template>
 
 <script setup>
+import { useRouter } from 'vue-router';
 import CustomButton from './components/CustomButton.vue';
 import ImageButton from "./components/ImageButton.vue";
-import {useRouter} from "vue-router";
+
 
 const router = useRouter();
 
-const storeButtonClicked = () => {
-  router.push('/store');
+const createAttackButtonClicked = () => {
+  router.push('/store/createattack');
 };
+const sellButtonClicked = () => {
+  router.push('/store/sellattack');
+};
+const buyButtonClicked = () => {
+  router.push('/store/buyattack');
+};
+
 </script>
 
 <style scoped>
-main{
+html, body{
   margin:0;
   height: 100%;
 }
 
-main{
+.container {
   background: #133973;
   position:absolute;
   top:0;
@@ -53,7 +58,7 @@ main{
   margin: 0 auto 30px;
 }
 
-.back {
+.exit {
   position: absolute;
   top: 0;
   left: 0;
@@ -61,7 +66,6 @@ main{
   height: auto;
   margin-top: 10px;
   margin-left: 10px;
-  rotate: 180deg;
 }
 
 .account {
