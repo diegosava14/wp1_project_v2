@@ -12,9 +12,10 @@
     <article>
       <div class="buttons">
         <CustomButton type="button">PLAY</CustomButton>
-        <CustomButton type="button">GAME FINDER</CustomButton>
-        <CustomButton type="button">CREATE GAME</CustomButton>
+        <CustomButton type="button" @click="gameFinderButtonClicked">GAME FINDER</CustomButton>
+        <CustomButton type="button" @click="gameCreationButtonClicked">CREATE GAME</CustomButton>
         <CustomButton type="button">RANKING</CustomButton>
+        <CustomButton type="button" @click="statisticsButtonClicked">STATISTICS</CustomButton>
         <CustomButton type="button" @click="storeButtonClicked">STORE</CustomButton>
       </div>
     </article>
@@ -27,9 +28,18 @@ import ImageButton from "./components/ImageButton.vue";
 import {useRouter} from "vue-router";
 
 const router = useRouter();
-
+const gameCreationButtonClicked = () => {
+  router.push('/gamecreation');
+};
+const gameFinderButtonClicked = () => {
+  router.push('/gamefinder');
+};
 const storeButtonClicked = () => {
   router.push('/store');
+};
+
+const statisticsButtonClicked = () => {
+  router.push('/statistics');
 };
 </script>
 

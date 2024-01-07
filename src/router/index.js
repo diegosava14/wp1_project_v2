@@ -10,6 +10,9 @@ import CreateAttack from "../views/CreateAttack.vue";
 import Store from "../views/Store.vue";
 import SellAttack from "../views/SellAttack.vue";
 import BuyAttack from "../views/BuyAttack.vue";
+import Statistics from "../views/Statistics.vue";
+import GameFinder from "../views/GameFinder.vue";
+import GameCreation from "../views/GameCreation.vue";
 
 const routes = [
     {
@@ -62,6 +65,21 @@ const routes = [
         path: '/store/buyattack',
         name: 'buy attack',
         component: BuyAttack,
+    },
+    {
+        path: '/statistics',
+        name: 'statistics',
+        component: Statistics,
+    },
+    {
+        path: '/gamefinder',
+        name: 'game finder',
+        component: GameFinder,
+    },
+    {
+        path: '/gamecreation',
+        name: 'game creation',
+        component: GameCreation,
     },
 ]
 
