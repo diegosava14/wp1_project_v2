@@ -2,8 +2,8 @@
   <main>
     <header>
       <div class="actionButtons">
-        <ImageButton class="account" type="button" image-url="./images/account_circle_FILL0_wght400_GRAD0_opsz24.svg"></ImageButton>
-        <ImageButton class="back" type="button" image-url="../../public/images/logout_FILL0_wght400_GRAD0_opsz24.svg"></ImageButton>
+        <ImageButton class="account" type="button" @click="accountButtonClicked" image-url="/images/account_circle_FILL0_wght400_GRAD0_opsz24.svg"></ImageButton>
+        <ImageButton class="back" type="button" image-url="/images/logout_FILL0_wght400_GRAD0_opsz24.svg"></ImageButton>
       </div>
       <div class="title">
         <h1>BATTLE<br>ARENA</h1>
@@ -14,7 +14,7 @@
         <CustomButton type="button">PLAY</CustomButton>
         <CustomButton type="button">GAME FINDER</CustomButton>
         <CustomButton type="button">CREATE GAME</CustomButton>
-        <CustomButton type="button">RANKING</CustomButton>
+        <CustomButton type="button" @click="rankingButtonClicked">RANKING</CustomButton>
         <CustomButton type="button" @click="storeButtonClicked">STORE</CustomButton>
       </div>
     </article>
@@ -28,8 +28,18 @@ import {useRouter} from "vue-router";
 
 const router = useRouter();
 
+console.log(localStorage.getItem('token'));
+
 const storeButtonClicked = () => {
   router.push('/store');
+};
+
+const accountButtonClicked = () => {
+  router.push('/account');
+};
+
+const rankingButtonClicked = () => {
+  router.push('/ranking');
 };
 </script>
 
