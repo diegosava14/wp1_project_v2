@@ -14,6 +14,9 @@ import Account from "../views/Account.vue";
 import Backpack from "../views/Backpack.vue";
 import Ranking from "../views/Ranking.vue";
 import OtherAccount from "../views/OtherAccount.vue";
+import Statistics from "../views/Statistics.vue";
+import GameFinder from "../views/GameFinder.vue";
+import GameCreation from "../views/GameCreation.vue";
 
 const routes = [
     {
@@ -86,6 +89,21 @@ const routes = [
         path: '/otheraccount',
         name: 'other account',
         component: OtherAccount,
+    },
+    {
+        path: '/statistics',
+        name: 'statistics',
+        component: Statistics,
+    },
+    {
+        path: '/gamefinder',
+        name: 'game finder',
+        component: GameFinder,
+    },
+    {
+        path: '/gamecreation',
+        name: 'game creation',
+        component: GameCreation,
     },
 ]
 
