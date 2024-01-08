@@ -28,6 +28,8 @@ import {useRouter} from "vue-router";
 
 const router = useRouter();
 
+console.log(localStorage.getItem('token'));
+
 const storeButtonClicked = () => {
   router.push('/store');
 };
