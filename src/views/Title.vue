@@ -39,13 +39,23 @@ const joinButtonClicked = async () => {
     if (response.error) {
       console.error('Register failed:', response.error.message);
     } else {
+      const player_ID = response.player_ID;
+      const password = response.password;
+      const img = response.img;
+      const level = response.level;
+      const xp = response.xp;
+      const coins = response.coins;
       const token = response.token;
 
+      localStorage.setItem('player_ID', player_ID);
+      localStorage.setItem('password', password);
+      localStorage.setItem('img', img);
+      localStorage.setItem('level', level);
+      localStorage.setItem('xp', xp);
+      localStorage.setItem('coins', coins);
       localStorage.setItem('token', token);
 
       console.log('Login successful!');
-      console.log('Token:', token);
-
       router.push('/mainmenu');
     }
   } catch (error) {

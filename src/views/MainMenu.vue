@@ -35,7 +35,9 @@ const gameFinderButtonClicked = () => {
   router.push('/gamefinder');
 };
 
-console.log(localStorage.getItem('token'));
+console.log(localStorage.getItem('token'), localStorage.getItem('player_ID'),
+    localStorage.getItem('password'), localStorage.getItem('img'), localStorage.getItem('level'),
+    localStorage.getItem('xp'), localStorage.getItem('coins'));
 
 const storeButtonClicked = () => {
   router.push('/store');
