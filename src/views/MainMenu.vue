@@ -3,7 +3,7 @@
     <header>
       <div class="actionButtons">
         <ImageButton class="account" type="button" @click="accountButtonClicked" image-url="/images/account_circle_FILL0_wght400_GRAD0_opsz24.svg"></ImageButton>
-        <ImageButton class="back" type="button" image-url="/images/logout_FILL0_wght400_GRAD0_opsz24.svg"></ImageButton>
+        <ImageButton class="back" type="button" @click="exitButtonClicked" image-url="/images/logout_FILL0_wght400_GRAD0_opsz24.svg"></ImageButton>
       </div>
       <div class="title">
         <h1>BATTLE<br>ARENA</h1>
@@ -35,7 +35,7 @@ const gameFinderButtonClicked = () => {
   router.push('/gamefinder');
 };
 
-console.log(localStorage.getItem('token'), localStorage.getItem('player_ID'),
+console.log('Token: '+localStorage.getItem('token')+'||||', localStorage.getItem('player_ID'),
     localStorage.getItem('password'), localStorage.getItem('img'), localStorage.getItem('level'),
     localStorage.getItem('xp'), localStorage.getItem('coins'));
 
@@ -53,6 +53,11 @@ const rankingButtonClicked = () => {
 
 const statisticsButtonClicked = () => {
   router.push('/statistics');
+};
+
+const exitButtonClicked = () => {
+  localStorage.clear();
+  router.push('/');
 };
 </script>
 

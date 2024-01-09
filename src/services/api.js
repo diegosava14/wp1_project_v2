@@ -80,8 +80,92 @@ async function getBuyableAttacks() {
     }
 }
 
-// Example usage:
-// getBuyableAttacks().then(attacks => console.log(attacks))
+async function getAttacksAPI(token, id) {
+    try {
+        const getAttacksURL = url + `/players/${id}/attacks`;
+        console.log(getAttacksURL);
 
+        let response = await axios({
+            method: 'get',
+            url: getAttacksURL,
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}` // Include the token in the Authorization header
+            },
+            timeout: 30000
+        });
 
-export { loginAPI, registerAPI, getBuyableAttacks };
+        return response.data;
+    } catch (error) {
+        console.error('Error:', error);
+        throw error;
+    }
+}
+
+async function getUserAPI(token, id) {
+    try {
+        const getUserURL = url + `/players/${id}`;
+        console.log(getUserURL);
+
+        let response = await axios({
+            method: 'get',
+            url: getUserURL,
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}` // Include the token in the Authorization header
+            },
+            timeout: 30000
+        });
+
+        return response.data;
+    } catch (error) {
+        console.error('Error:', error);
+        throw error;
+    }
+}
+
+async function getUsersAPI(token) {
+    try {
+        const getUsersURL = url + `/players`;
+        console.log(token);
+
+        let response = await axios({
+            method: 'get',
+            url: getUsersURL,
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}` // Include the token in the Authorization header
+            },
+            timeout: 30000
+        });
+
+        return response.data;
+    } catch (error) {
+        console.error('Error:', error);
+        throw error;
+    }
+}
+
+async function deleteUserAPI(token) {
+    try {
+        const deleteUserURL = url + `/players`;
+        console.log(token);
+
+        let response = await axios({
+            method: 'delete',
+            url: deleteUserURL,
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}` // Include the token in the Authorization header
+            },
+            timeout: 30000
+        });
+
+        return response.data;
+    } catch (error) {
+        console.error('Error:', error);
+        throw error;
+    }
+}
+
+export { loginAPI, registerAPI, getBuyableAttacks, getAttacksAPI, getUserAPI , getUsersAPI, deleteUserAPI};

@@ -18,7 +18,8 @@
         <div>
           <label for="options">Select an Option:</label>
           <select id="options" v-model="selectedOption">
-            <option value="public/images/pfp1.jpg">Mike</option>
+            <option value="/images/pfp1.jpg">Mike</option>
+            <option value="/images/pfp2.jpg">Stare</option>
           </select>
         </div>
       </div>
@@ -32,7 +33,7 @@
 <script setup>
 import CustomButton from './components/CustomButton.vue';
 import axios from 'axios';
-import { registerAPI } from '../services/api.js';
+import {loginAPI, registerAPI} from '../services/api.js';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 
@@ -52,6 +53,37 @@ const createButtonClicked = async () => {
       console.error('Register failed:', response.error.message);
     } else {
       console.log('Registration successful!');
+
+      try {
+        const response2 = await loginAPI(username.value, password.value);
+
+        if (response2.error) {
+          console.error('Login failed:', response2.error.message);
+        } else {
+          const player_ID = response2.player_ID;
+          const password = response2.password;
+          const img = response2.img;
+          const level = response2.level;
+          const xp = response2.xp;
+          const coins = response2.coins;
+          const token = response2.token;
+
+          localStorage.setItem('player_ID', player_ID);
+          localStorage.setItem('password', password);
+          localStorage.setItem('img', img);
+          localStorage.setItem('level', level);
+          localStorage.setItem('xp', xp);
+          localStorage.setItem('coins', coins);
+          localStorage.setItem('token', token);
+
+          console.log('Login successful!');
+          router.push('/mainmenu');
+        }
+      }catch (error) {
+        console.error('Error:', error);
+        console.error('Response Data:', error.response.data);
+        throw error;
+      }
     }
   }catch (error) {
     console.error('Error:', error);

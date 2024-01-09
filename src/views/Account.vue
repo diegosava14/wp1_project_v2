@@ -5,12 +5,12 @@
       <ImageButton class="back" type="button" @click="backButtonClicked" image-url="/images/arrow_back_FILL0_wght400_GRAD0_opsz24.svg"></ImageButton>
     </div>
     <div class="title">
-      <h1>Xx_YOU_xX</h1>
+      <h1>{{ pageTitle }}</h1>
     </div>
   </header>
   <article>
     <div class="image">
-      <img class="account_image" src="/images/pfp1.jpg"/>
+      <img class="account_image" :src="img"/>
     </div>
     <div class="labels">
       <CustomLabel id="Xp" :labelText="textXp"></CustomLabel>
@@ -36,7 +36,7 @@
     </div>
     <div class="buttons">
       <CustomButton type="button" @click="backpackButtonClicked">BACKPACK</CustomButton>
-      <CustomButton type="button">DELETE</CustomButton>
+      <CustomButton type="button" @click="deleteButtonClicked">DELETE</CustomButton>
     </div>
   </article>
 </main>
@@ -47,12 +47,36 @@ import ImageButton from "./components/ImageButton.vue";
 import CustomButton from './components/CustomButton.vue';
 import CustomLabel from './components/CustomLabel.vue';
 import { useRouter } from "vue-router";
+import {onMounted} from "vue";
+import {getAttacksAPI, getUserAPI, loginAPI, getUsersAPI, deleteUserAPI} from "../services/api.js";
 
-let textXp = 'XP';
-let textLvl = 'LVL';
-let textCoins = 'COINS';
+let textXp = 'XP: '+localStorage.getItem('xp');
+let textLvl = 'LVL: '+localStorage.getItem('level');
+let textCoins = 'COINS: '+localStorage.getItem('coins');
+let pageTitle = localStorage.getItem('player_ID');
+
+const img = localStorage.getItem('img');
 
 const router = useRouter();
+
+onMounted(async () => {
+  try {
+    //const response = await getAttacksAPI(localStorage.getItem(('token')), localStorage.getItem(('player_ID')));
+    //const response = await getUserAPI(localStorage.getItem(('token')), localStorage.getItem(('player_ID')));
+    const response = await getUsersAPI(localStorage.getItem(('token')));
+    console.log('Register API Response:', response);
+
+    if (response.error) {
+      console.error('Register failed:', response.error.message);
+    } else {
+
+    }
+  } catch (error) {
+    console.error('Error:', error);
+    console.error('Response Data:', error.response.data);
+    throw error;
+  }
+});
 
 const backButtonClicked = () => {
   router.push('/mainmenu');
@@ -60,6 +84,24 @@ const backButtonClicked = () => {
 
 const backpackButtonClicked = () => {
   router.push('/account/backpack');
+};
+
+const deleteButtonClicked = async () => {
+  try {
+    const response = await deleteUserAPI(localStorage.getItem(('token')));
+    console.log('Register API Response:', response);
+
+    if (response.error) {
+      console.error('Register failed:', response.error.message);
+    } else {
+      console.log('Deletion successful!');
+      router.push('/title');
+    }
+  } catch (error) {
+    console.error('Error:', error);
+    console.error('Response Data:', error.response.data);
+    throw error;
+  }
 };
 </script>
 
