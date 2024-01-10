@@ -54,34 +54,180 @@ async function registerAPI(username, password, img) {
     }
 }
 
-async function getBuyableAttacks() {
+async function getBuyableAttacks(token) {
     try {
-        const attacksURL = `${url}/shop/attacks`;
+        const getUsersURL = url + `/shop/attacks`;
+        console.log(token);
 
-        const response = await axios.get(attacksURL);
+        let response = await axios({
+            method: 'get',
+            url: getUsersURL,
+            headers: {
+                'Content-Type': 'application/json',
+                'Bearer' : token
+            },
+            timeout: 30000
+        });
 
         return response.data;
     } catch (error) {
-        if (error.response) {
-            // The request was made and the server responded with a status code
-            // other than 2xx (success).
-            console.error('Server responded with non-success status:', error.response.status);
-            console.error('Response data:', error.response.data);
-            console.error('Response headers:', error.response.headers);
-        } else if (error.request) {
-            // The request was made but no response was received.
-            console.error('No response received from the server.');
-        } else {
-            // Something happened in setting up the request that triggered an Error.
-            console.error('Error setting up the request:', error.message);
-        }
-
+        console.error('Error:', error);
         throw error;
     }
 }
 
-// Example usage:
-// getBuyableAttacks().then(attacks => console.log(attacks))
+async function buyAttack(token, id) {
+    try {
+        const getUsersURL = url + `/shop/attacks/${id}/buy`;
+        console.log(token);
 
+        let response = await axios({
+            method: 'post',
+            url: getUsersURL,
+            headers: {
+                'Content-Type': 'application/json',
+                'Bearer' : token
+            },
+            timeout: 30000
+        });
 
-export { loginAPI, registerAPI, getBuyableAttacks };
+        return response.data;
+    } catch (error) {
+        console.error('Error:', error);
+        throw error;
+    }
+}
+
+async function getAttacksAPI(token, id) {
+    try {
+        const getAttacksURL = url + `/players/${id}/attacks`;
+        console.log(getAttacksURL);
+
+        let response = await axios({
+            method: 'get',
+            url: getAttacksURL,
+            headers: {
+                'Content-Type': 'application/json',
+                'Bearer' : token
+            },
+            timeout: 30000
+        });
+
+        return response.data;
+    } catch (error) {
+        console.error('Error:', error);
+        throw error;
+    }
+}
+
+async function getUserAPI(token, id) {
+    try {
+        const getUserURL = url + `/players/${id}`;
+        console.log(getUserURL);
+
+        let response = await axios({
+            method: 'get',
+            url: getUserURL,
+            headers: {
+                'Content-Type': 'application/json',
+                'Bearer' : token
+            },
+            timeout: 30000
+        });
+
+        return response.data;
+    } catch (error) {
+        console.error('Error:', error);
+        throw error;
+    }
+}
+
+async function getUsersAPI(token) {
+    try {
+        const getUsersURL = url + `/players`;
+        console.log(token);
+
+        let response = await axios({
+            method: 'get',
+            url: getUsersURL,
+            headers: {
+                'Content-Type': 'application/json',
+                'Bearer' : token
+            },
+            timeout: 30000
+        });
+
+        return response.data;
+    } catch (error) {
+        console.error('Error:', error);
+        throw error;
+    }
+}
+
+async function getStatsAPI(token, id) {
+    try {
+        const getUserURL = url + `/players/${id}/statistics`;
+        console.log(getUserURL);
+
+        let response = await axios({
+            method: 'get',
+            url: getUserURL,
+            headers: {
+                'Content-Type': 'application/json',
+                'Bearer' : token
+            },
+            timeout: 30000
+        });
+
+        return response.data;
+    } catch (error) {
+        console.error('Error:', error);
+        throw error;
+    }
+}
+
+async function getMyAttacksAPI(token) {
+    try {
+        const getUserURL = url + `/players/attacks`;
+        console.log(getUserURL);
+
+        let response = await axios({
+            method: 'get',
+            url: getUserURL,
+            headers: {
+                'Content-Type': 'application/json',
+                'Bearer' : token
+            },
+            timeout: 30000
+        });
+
+        return response.data;
+    } catch (error) {
+        console.error('Error:', error);
+        throw error;
+    }
+}
+
+async function deleteUserAPI(token) {
+    try {
+        const deleteUserURL = url + `/players`;
+        console.log(token);
+
+        let response = await axios({
+            method: 'delete',
+            url: deleteUserURL,
+            headers: {
+                'Content-Type': 'application/json',
+                'Bearer' : token
+            },
+            timeout: 30000
+        });
+
+        return response.data;
+    } catch (error) {
+        console.error('Error:', error);
+        throw error;
+    }
+}
+
+export { loginAPI, registerAPI, getBuyableAttacks, getAttacksAPI, getUserAPI , getUsersAPI, deleteUserAPI, getStatsAPI, getMyAttacksAPI, buyAttack};
