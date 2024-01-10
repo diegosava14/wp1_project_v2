@@ -17,6 +17,8 @@ import OtherAccount from "../views/OtherAccount.vue";
 import Statistics from "../views/Statistics.vue";
 import GameFinder from "../views/GameFinder.vue";
 import GameCreation from "../views/GameCreation.vue";
+import GameGrid from "../views/GameGrid.vue";
+import GameReplay from "../views/GameReplay.vue";
 
 const routes = [
     {
@@ -104,6 +106,16 @@ const routes = [
         path: '/gamecreation',
         name: 'game creation',
         component: GameCreation,
+    },
+    {
+        path: '/game',
+        name: 'game',
+        component: GameGrid,
+    },
+    {
+        path: '/gamereplay',
+        name: 'game replay',
+        component: GameReplay,
     },
 ]
 
