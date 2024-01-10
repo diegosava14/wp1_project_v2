@@ -13,9 +13,10 @@
       <div v-for="item in items" :key="item.id" class="item-container">
         <a href="#">
           <p class="item-name">{{ item.text.attack }}</p>
+          <p class="item-name">{{ item.text.positions }}</p>
           <p class="item-power">{{ item.text.power }}</p>
           <p class="item-equipped">{{ item.text.equipped }}</p>
-          <p class="item-sale">{{ item.text.onSale }}</p>
+          <p class="item-sale">{{ item.text.on_sale }}</p>
         </a>
       </div>
     </div>
@@ -26,23 +27,38 @@
 <script setup>
 import ImageButton from "./components/ImageButton.vue";
 import {useRouter} from "vue-router";
+import {onMounted, ref} from "vue";
+import {getMyAttacksAPI} from "../services/api.js";
 
 const router = useRouter();
 
-const items = [];
-let i;
+let items = ref([]);
 
-for (i = 0; i < 100; i++) {
-  items.push({
-    id: i,
-    text: {
-      attack: 'Attack ' + i,
-      power: 'Power --> ' + 1,
-      equipped: 'Equipped --> YES',
-      onSale: 'On Sale --> NO'
+onMounted(async () => {
+  try {
+    const response = await getMyAttacksAPI(localStorage.getItem(('token')));
+
+    console.log('Register API Response:', response);
+
+    if (response.error) {
+      console.error('Register failed:', response.error.message);
+    } else {
+      items.value = response.map(attack => ({ id: attack.attack_ID,
+        text: {
+          attack: attack.attack_ID,
+          positions: 'Positions: ' + attack.positions,
+          power: 'Power: ' + attack.power,
+          equipped: 'Equipped: ' + attack.equipped,
+          on_sale: 'On sale: ' + attack.on_sale
+        } }));
+
     }
-  });
-}
+  } catch (error) {
+    console.error('Error:', error);
+    console.error('Response Data:', error.response.data);
+    throw error;
+  }
+});
 
 const backButtonClicked = () => {
   router.push('/account');

@@ -18,21 +18,9 @@
       <CustomLabel id="Coins" :labelText="textCoins"></CustomLabel>
     </div>
     <div class="attacks">
-      <select>
-        <option value="Option1">Attack1</option>
-        <option value="Option2">Attack2</option>
-        <option value="Option3">Attack3</option>
-      </select>
-      <select>
-        <option value="Option1">Attack1</option>
-        <option value="Option2">Attack2</option>
-        <option value="Option3">Attack3</option>
-      </select>
-      <select>
-        <option value="Option1">Attack1</option>
-        <option value="Option2">Attack2</option>
-        <option value="Option3">Attack3</option>
-      </select>
+      <CustomButton type="button" @click="equipAttack1">{{ 'Attack1: '+attacks[0] }}</CustomButton>
+      <CustomButton type="button" @click="equipAttack2">{{ 'Attack2: '+attacks[1] }}</CustomButton>
+      <CustomButton type="button" @click="equipAttack3">{{ 'Attack3: '+attacks[2] }}</CustomButton>
     </div>
     <div class="buttons">
       <CustomButton type="button" @click="backpackButtonClicked">BACKPACK</CustomButton>
@@ -47,13 +35,23 @@ import ImageButton from "./components/ImageButton.vue";
 import CustomButton from './components/CustomButton.vue';
 import CustomLabel from './components/CustomLabel.vue';
 import { useRouter } from "vue-router";
-import {onMounted} from "vue";
-import {getAttacksAPI, getUserAPI, loginAPI, getUsersAPI, deleteUserAPI} from "../services/api.js";
+import {onMounted, ref} from "vue";
+import {
+  getAttacksAPI,
+  getUserAPI,
+  loginAPI,
+  getUsersAPI,
+  deleteUserAPI,
+  getMyAttacksAPI,
+  getBuyableAttacks,
+  buyAttack
+} from "../services/api.js";
 
 let textXp = 'XP: '+localStorage.getItem('xp');
 let textLvl = 'LVL: '+localStorage.getItem('level');
 let textCoins = 'COINS: '+localStorage.getItem('coins');
 let pageTitle = localStorage.getItem('player_ID');
+let attacks = ref(['None','None','None']);
 
 const img = localStorage.getItem('img');
 
@@ -61,15 +59,20 @@ const router = useRouter();
 
 onMounted(async () => {
   try {
-    //const response = await getAttacksAPI(localStorage.getItem(('token')), localStorage.getItem(('player_ID')));
-    //const response = await getUserAPI(localStorage.getItem(('token')), localStorage.getItem(('player_ID')));
-    const response = await getUsersAPI(localStorage.getItem(('token')));
+    const response = await getMyAttacksAPI(localStorage.getItem(('token')));
+
     console.log('Register API Response:', response);
 
     if (response.error) {
       console.error('Register failed:', response.error.message);
     } else {
-
+      let counter = 0;
+      for (let i = 0; i < response.length; i++) {
+        if(response[i].equipped == true){
+          attacks.value[counter] = response[i].attack_ID;
+          counter++;
+        }
+      }
     }
   } catch (error) {
     console.error('Error:', error);
@@ -84,6 +87,21 @@ const backButtonClicked = () => {
 
 const backpackButtonClicked = () => {
   router.push('/account/backpack');
+};
+
+const equipAttack1 = () => {
+  localStorage.setItem('selectedAttack', attacks.value[0]);
+  router.push('/account/chooseattack');
+};
+
+const equipAttack2 = () => {
+  localStorage.setItem('selectedAttack', attacks.value[1]);
+  router.push('/account/chooseattack');
+};
+
+const equipAttack3 = () => {
+  localStorage.setItem('selectedAttack', attacks.value[2]);
+  router.push('/account/chooseattack');
 };
 
 const deleteButtonClicked = async () => {
@@ -166,6 +184,10 @@ select{
 
 .attacks{
   margin-bottom: 30px;
+}
+
+.custom-button {
+  text-transform: none;
 }
 
 .buttons {

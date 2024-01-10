@@ -5,12 +5,12 @@
           <ImageButton class="back" type="button" @click="backButtonClicked" image-url="/images/arrow_back_FILL0_wght400_GRAD0_opsz24.svg"></ImageButton>
         </div>
         <div class="title">
-          <h1>Xx_YOU_xX</h1>
+          <h1>{{ pageTitle }}</h1>
         </div>
       </header>
       <article>
         <div class="image">
-          <img class="account_image" src="/images/pfp1.jpg"/>
+          <img class="account_image" :src="img"/>
         </div>
         <div class="labels">
           <CustomLabel id="Xp" :labelText="textXp"></CustomLabel>
@@ -27,17 +27,65 @@
 import CustomLabel from './components/CustomLabel.vue';
 import ImageButton from "./components/ImageButton.vue";
 import { useRouter } from "vue-router";
+import {onMounted, ref} from "vue";
+import {getStatsAPI, getUserAPI} from "../services/api.js";
 
 const router = useRouter();
 
-let textXp = 'XP';
-let textLvl = 'LVL';
-let textCoins = 'COINS';
-let wins = "%WON"
-let games = "Finished Games"
+let textXp = ref('');
+let textLvl = ref('');
+let textCoins = ref('');
+let wins = ref('');
+let games = ref('');
+let pageTitle = localStorage.getItem('otherPlayer_ID');
+let img = ref('');
+
+onMounted(async () => {
+  try {
+    const response = await getUserAPI(localStorage.getItem(('token')), localStorage.getItem(('otherPlayer_ID')));
+    console.log('Register API Response:', response);
+
+    if (response.error) {
+      console.error(response.error.message);
+    } else {
+      textXp.value = 'XP: ' + response.xp.toString();
+      textLvl.value = 'LVL: ' + response.level.toString();
+      textCoins.value = 'COINS: ' + response.coins.toString();
+      img.value = response.img.toString();
+    }
+  } catch (error) {
+    console.error('Error:', error);
+    console.error('Response Data:', error.response.data);
+    throw error;
+  }
+
+  try {
+    const response = await getStatsAPI(localStorage.getItem(('token')), localStorage.getItem(('otherPlayer_ID')));
+    console.log('Register API Response:', response);
+
+    if (response.error) {
+      console.error(response.error.message);
+    } else {
+      let percentage = (response.games_won/response.games_played*100);
+
+      if (isNaN(percentage)){
+        percentage = 0;
+      }
+
+      wins.value = "WON: "+ percentage.toString() + "%";
+      games.value = "Finished Games: "+response.games_played.toString();
+    }
+  } catch (error) {
+    console.error('Error:', error);
+    console.error('Response Data:', error.response.data);
+    throw error;
+  }
+});
+
+console.log(localStorage.getItem('otherPlayer_ID'));
 
 const backButtonClicked = () => {
-  router.push('/mainmenu');
+  router.push('/ranking');
 };
 </script>
 

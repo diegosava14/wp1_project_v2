@@ -17,6 +17,7 @@ import OtherAccount from "../views/OtherAccount.vue";
 import Statistics from "../views/Statistics.vue";
 import GameFinder from "../views/GameFinder.vue";
 import GameCreation from "../views/GameCreation.vue";
+import ChooseAttack from "../views/ChooseAttack.vue";
 
 const routes = [
     {
@@ -79,6 +80,11 @@ const routes = [
         path: '/account/backpack',
         name: 'backpack',
         component: Backpack,
+    },
+    {
+        path: '/account/chooseAttack',
+        name: 'choose attack',
+        component: ChooseAttack,
     },
     {
         path: '/ranking',
