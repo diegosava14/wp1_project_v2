@@ -59,6 +59,7 @@ const router = useRouter();
 
 onMounted(async () => {
   try {
+
     const response = await getMyAttacksAPI(localStorage.getItem(('token')));
 
     console.log('Register API Response:', response);
