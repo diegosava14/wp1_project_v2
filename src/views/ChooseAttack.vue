@@ -21,6 +21,9 @@
           </a>
         </div>
       </div>
+      <div class="buttons">
+        <CustomButton type="button" @click="unequipButtonClicked">UNEQUIP</CustomButton>
+      </div>
     </article>
   </main>
 </template>
@@ -29,7 +32,8 @@
 import ImageButton from "./components/ImageButton.vue";
 import {useRouter} from "vue-router";
 import {onMounted, ref} from "vue";
-import {getMyAttacksAPI} from "../services/api.js";
+import {equipAttack, getMyAttacksAPI, swapAttack, unequipAttack} from "../services/api.js";
+import CustomButton from "./components/CustomButton.vue";
 
 const router = useRouter();
 
@@ -46,15 +50,16 @@ onMounted(async () => {
     if (response.error) {
       console.error('Register failed:', response.error.message);
     } else {
-      items.value = response.map(attack => ({ id: attack.attack_ID,
-        text: {
-          attack: attack.attack_ID,
-          positions: 'Positions: ' + attack.positions,
-          power: 'Power: ' + attack.power,
-          equipped: 'Equipped: ' + attack.equipped,
-          on_sale: 'On sale: ' + attack.on_sale
-        } }));
-
+      items.value = response.filter(attack => !attack.equipped).map(attack => ({
+            id: attack.attack_ID,
+            text: {
+              attack: attack.attack_ID,
+              positions: 'Positions: ' + attack.positions,
+              power: 'Power: ' + attack.power,
+              equipped: 'Equipped: ' + attack.equipped,
+              on_sale: 'On sale: ' + attack.on_sale
+            }
+          }));
     }
   } catch (error) {
     console.error('Error:', error);
@@ -63,9 +68,53 @@ onMounted(async () => {
   }
 });
 
-const itemClicked = (event, clickedId) => {
+const itemClicked = async (event, clickedId) => {
   event.preventDefault();
-  console.log(clickedId);
+
+  try {
+    let response;
+
+    if(localStorage.getItem('selectedAttack') == 'None') {
+      response = await equipAttack(localStorage.getItem(('token')), clickedId);
+    }else{
+      response = await swapAttack(localStorage.getItem(('token')), clickedId, localStorage.getItem('selectedAttack'));
+    }
+
+    console.log('Register API Response:', response);
+
+    if (response.error) {
+      console.error('Register failed:', response.error.message);
+    } else {
+      console.log('Attack equipped!');
+      router.push('/account');
+    }
+  } catch (error) {
+    console.error('Error:', error);
+    console.error('Response Data:', error.response.data);
+    throw error;
+  }
+}
+
+const unequipButtonClicked = () => {
+  if(localStorage.getItem('selectedAttack') == 'None') {
+    router.push('/account');
+  }else{
+    try {
+      const response = unequipAttack(localStorage.getItem(('token')), localStorage.getItem('selectedAttack'));
+      console.log('Register API Response:', response);
+
+      if (response.error) {
+        console.error('Register failed:', response.error.message);
+      } else {
+        console.log('Attack unequipped!');
+        router.push('/account');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      console.error('Response Data:', error.response.data);
+      throw error;
+    }
+  }
 };
 
 const backButtonClicked = () => {
@@ -84,6 +133,16 @@ main{
   color: #EBEF25;
   text-align: center;
   font-family: 'Porter Sans Block';
+  font-size: 50px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  margin-bottom: 40px;
+}
+
+.title h2 {
+  color: #EBEF25;
+  text-align: center;
   font-size: 50px;
   font-style: normal;
   font-weight: 400;
@@ -140,6 +199,12 @@ main {
 
 .scroll-list a:last-child {
   border-bottom: none;
+}
+
+.buttons {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
 }
 
 .item-container {

@@ -113,7 +113,7 @@ const deleteButtonClicked = async () => {
       console.error('Register failed:', response.error.message);
     } else {
       console.log('Deletion successful!');
-      router.push('/title');
+      router.push('/');
     }
   } catch (error) {
     console.error('Error:', error);
@@ -195,6 +195,11 @@ select{
   align-items: center;
   flex-direction: column;
   gap: 10px;
+}
+
+.image {
+  text-align: center; /* Center the content inside the .image div */
+  margin-bottom: 30px;
 }
 
 </style>

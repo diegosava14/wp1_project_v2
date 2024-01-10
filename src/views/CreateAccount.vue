@@ -1,6 +1,9 @@
 <template>
   <main>
     <header>
+      <div class="actionButtons">
+        <ImageButton class="back" type="button" @click="backButtonClicked" image-url="/images/arrow_back_FILL0_wght400_GRAD0_opsz24.svg"></ImageButton>
+      </div>
       <div class="title">
         <h1>CREATE<br>ACCOUNT</h1>
       </div>
@@ -36,6 +39,7 @@ import axios from 'axios';
 import {loginAPI, registerAPI} from '../services/api.js';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
+import ImageButton from "./components/ImageButton.vue";
 
 // Define reactive data properties
 const username = ref('');
@@ -90,7 +94,10 @@ const createButtonClicked = async () => {
     console.error('Response Data:', error.response.data);
     throw error;
   }
-  //router.push("/mainmenu");
+};
+
+const backButtonClicked = () => {
+  router.push('/');
 };
 </script>
 
@@ -135,7 +142,26 @@ main {
 }
 
 .buttons {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.actionButtons {
+  display: flex;
+  justify-content: flex-start;
   align-items: center;
+  margin-right: auto;
+}
+
+.back {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 30px;
+  height: auto;
+  margin-top: 10px;
+  margin-left: 10px;
 }
 
 label {

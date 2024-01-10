@@ -98,6 +98,72 @@ async function buyAttack(token, id) {
     }
 }
 
+async function swapAttack(token, equip_id, unequip_id) {
+    try {
+        const getUsersURL = url + `/players/attacks/${equip_id}/${unequip_id}`;
+        console.log(token);
+
+        let response = await axios({
+            method: 'patch',
+            url: getUsersURL,
+            headers: {
+                'Content-Type': 'application/json',
+                'Bearer' : token
+            },
+            timeout: 30000
+        });
+
+        return response.data;
+    } catch (error) {
+        console.error('Error:', error);
+        throw error;
+    }
+}
+
+async function equipAttack(token, equip_id) {
+    try {
+        const getUsersURL = url + `/players/attacks/${equip_id}`;
+        console.log(token);
+
+        let response = await axios({
+            method: 'post',
+            url: getUsersURL,
+            headers: {
+                'Content-Type': 'application/json',
+                'Bearer' : token
+            },
+            timeout: 30000
+        });
+
+        return response.data;
+    } catch (error) {
+        console.error('Error:', error);
+        throw error;
+    }
+}
+
+async function unequipAttack(token, unequip_id) {
+    try {
+        const getUsersURL = url + `/players/attacks/${unequip_id}`;
+        console.log(token);
+
+        let response = await axios({
+            method: 'delete',
+            url: getUsersURL,
+            headers: {
+                'Content-Type': 'application/json',
+                'Bearer' : token
+            },
+            timeout: 30000
+        });
+
+        return response.data;
+    } catch (error) {
+        console.error('Error:', error);
+        throw error;
+    }
+}
+
 async function getAttacksAPI(token, id) {
     try {
         const getAttacksURL = url + `/players/${id}/attacks`;
@@ -230,4 +296,5 @@ async function deleteUserAPI(token) {
     }
 }
 
-export { loginAPI, registerAPI, getBuyableAttacks, getAttacksAPI, getUserAPI , getUsersAPI, deleteUserAPI, getStatsAPI, getMyAttacksAPI, buyAttack};
+export { loginAPI, registerAPI, getBuyableAttacks, getAttacksAPI, getUserAPI , getUsersAPI, deleteUserAPI, getStatsAPI,
+    getMyAttacksAPI, buyAttack, equipAttack, unequipAttack, swapAttack };
