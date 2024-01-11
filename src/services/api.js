@@ -56,12 +56,12 @@ async function registerAPI(username, password, img) {
 
 async function getBuyableAttacks(token) {
     try {
-        const getUsersURL = url + `/shop/attacks`;
+        const getBuyableAttacksURL = url + `/shop/attacks`;
         console.log(token);
 
         let response = await axios({
             method: 'get',
-            url: getUsersURL,
+            url: getBuyableAttacksURL,
             headers: {
                 'Content-Type': 'application/json',
                 'Bearer' : token
@@ -78,7 +78,7 @@ async function getBuyableAttacks(token) {
 
 async function buyAttack(token, id) {
     try {
-        const getUsersURL = url + `/shop/attacks/${id}/buy`;
+        const getUsersURL = url + '/shop/attacks/' + id + '/buy';
         console.log(token);
 
         let response = await axios({
@@ -91,6 +91,33 @@ async function buyAttack(token, id) {
             timeout: 30000
         });
 
+        return response.data;
+    } catch (error) {
+        console.error('Error:', error);
+        throw error;
+    }
+}
+
+async function createAttack(token, attack_ID, positions, img) {
+    try {
+        const createAttackURL = url + `/shop/attacks`;
+
+        console.log(typeof token, typeof attack_ID, typeof positions, typeof img);
+
+        let response = await axios({
+            method: 'post',
+            url: createAttackURL,
+            headers: {
+                'Content-Type': 'application/json',
+                'Bearer' : token
+            },
+            data: {
+                attack_ID: attack_ID,
+                positions: positions,
+                img: img
+            },
+            timeout: 30000
+        });
         return response.data;
     } catch (error) {
         console.error('Error:', error);
@@ -230,4 +257,4 @@ async function deleteUserAPI(token) {
     }
 }
 
-export { loginAPI, registerAPI, getBuyableAttacks, getAttacksAPI, getUserAPI , getUsersAPI, deleteUserAPI, getStatsAPI, getMyAttacksAPI, buyAttack};
+export { loginAPI, registerAPI, getBuyableAttacks, getAttacksAPI, getUserAPI , getUsersAPI, deleteUserAPI, getStatsAPI, getMyAttacksAPI, buyAttack, createAttack};

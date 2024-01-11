@@ -7,8 +7,8 @@
     </header>
     <article>
       <div class="form">
-        <TextInput id="username" placeholder="Username" v-model="username" />
-        <TextInput id="password" placeholder="Password" v-model="password" />
+        <input type="text" id="username" v-model="username" placeholder="Enter your username" />
+        <input type="password" id="password" v-model="password" placeholder="Enter your password" />
       </div>
       <div class="buttons">
         <CustomButton type="button" @click="joinButtonClicked">JOIN</CustomButton>
@@ -22,19 +22,55 @@
 import { useRouter } from 'vue-router';
 import CustomButton from './components/CustomButton.vue';
 import TextInput from './components/TextInput.vue';
+import {ref} from "vue";
+import {loginAPI, registerAPI} from "../services/api.js";
 
-let username = '';
-let password = '';
+const username = ref('');
+const password = ref('');
 
 const router = useRouter();
 
-const joinButtonClicked = () => {
-  router.push('/mainmenu');
+const joinButtonClicked = async () => {
+  console.log(username.value, password.value);
+  try {
+    const response = await loginAPI(username.value, password.value);
+    console.log('Register API Response:', response);
+
+    if (response.error) {
+      console.error('Register failed:', response.error.message);
+    } else {
+      const player_ID = response.player_ID;
+      const password = response.password;
+      const img = response.img;
+      const level = response.level;
+      const xp = response.xp;
+      const coins = response.coins;
+      const token = response.token;
+
+      localStorage.setItem('player_ID', player_ID);
+      localStorage.setItem('password', password);
+      localStorage.setItem('img', img);
+      localStorage.setItem('level', level);
+      localStorage.setItem('xp', xp);
+      localStorage.setItem('coins', coins);
+      localStorage.setItem('token', token);
+
+      console.log('Login successful!');
+      router.push('/mainmenu');
+    }
+  } catch (error) {
+    console.error('Error:', error);
+    console.error('Response Data:', error.response.data);
+    throw error;
+  }
 };
 
 const createbuttonClicked = () => {
   router.push('/createaccount');
 };
+
+
+
 </script>
 
 <style scoped>
@@ -79,5 +115,20 @@ main{
 
 .buttons {
   align-items: center;
+}
+
+.form div {
+  margin-bottom: 30px; /* Increased separation between form elements */
+}
+
+input{
+  width: 80%;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #fff;
+  color: #333;
+  margin-bottom: 30px;
 }
 </style>
