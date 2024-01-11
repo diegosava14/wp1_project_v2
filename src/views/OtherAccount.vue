@@ -138,4 +138,11 @@ main {
 .image {
   margin-bottom: 30px;
 }
+
+.account_image {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+}
 </style>
