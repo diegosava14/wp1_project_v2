@@ -9,25 +9,32 @@
   <main>
     <div class="content">
       <div class="labels">
+        <input type="text" id="game_ID" v-model="game_ID" placeholder="Name" />
         <div class="greenRectangle">
           <CustomLabel id="Arena's size" :labelText="textArenaSize"></CustomLabel>
-          <select>
-            <option value="Option1">2X2</option>
-            <option value="Option2">3X3</option>
-            <option value="Option3">4X4</option>
+          <select id="options" v-model="selectedSize">
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
           </select>
         </div>
         <div class="greenRectangle">
           <CustomLabel id="Player's HP" :labelText="textPlayersHP"></CustomLabel>
-          <select>
-            <option value="Option1">10HP</option>
-            <option value="Option2">25HP</option>
-            <option value="Option3">50HP</option>
+          <select id="options" v-model="selectedHP">
+            <option value="15">15</option>
+            <option value="25">25</option>
+            <option value="50">50</option>
           </select>
         </div>
       </div>
       <div class="buttons">
-        <CustomButton type="button">ENTER GAME</CustomButton>
+        <CustomButton type="button" @click="() => createGameButtonClicked(game_ID, selectedSize, selectedHP)">ENTER GAME</CustomButton>
       </div>
     </div>
   </main>
@@ -38,9 +45,44 @@
 <script setup>
 import CustomButton from './components/CustomButton.vue';
 import CustomLabel from './components/CustomLabel.vue';
+import { ref } from "vue";
+import { createGame } from "../services/api.js";
+import router from "../router/index.js";
 
 let textArenaSize = 'Arena size';
 let textPlayersHP = 'Player HP';
+
+const game_ID = ref('');
+let selectedSize = ref('');
+let selectedHP = ref('');
+
+const createGameButtonClicked = async (game_ID, selectedSize, selectedHP) => {
+  try {
+    const token = localStorage.getItem('token');
+    const numericSize = parseInt(selectedSize);
+    const numericHP = parseInt(selectedHP);
+
+    console.log(game_ID);
+    console.log(numericSize);
+    console.log(numericHP);
+
+    const response = await createGame(token, game_ID, numericSize, numericHP);
+
+    console.log('Create game API Response:', response);
+
+    if (response.error) {
+      console.error('Create game failed:', response.error.message);
+    } else {
+      //To modify when Oli has the gameplay working.
+      //router.push('/gamegrid');
+    }
+  } catch (error) {
+    console.error('Error:', error);
+    console.error('Response Data:', error.response?.data);
+    throw error;
+  }
+};
+
 </script>
 
 <style scoped>
@@ -123,5 +165,17 @@ select {
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+input {
+  box-sizing: border-box; /* Ensure proper alignment */
+  width: 90%;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #fff;
+  color: #333;
+  margin-bottom: 30px;
 }
 </style>

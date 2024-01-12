@@ -11,7 +11,6 @@
     </header>
     <article>
       <div class="buttons">
-        <CustomButton type="button" @click="gameButtonClicked">PLAY</CustomButton>
         <CustomButton type="button" @click="gameFinderButtonClicked">GAME FINDER</CustomButton>
         <CustomButton type="button" @click="gameCreationButtonClicked">CREATE GAME</CustomButton>
         <CustomButton type="button" @click="statisticsButtonClicked">STATISTICS</CustomButton>
@@ -34,15 +33,6 @@ const gameCreationButtonClicked = () => {
 const gameFinderButtonClicked = () => {
   router.push('/gamefinder');
 };
-
-const gameButtonClicked = () => {
-  router.push('/game');
-};
-
-console.log('Token: '+localStorage.getItem('token')+'||||', localStorage.getItem('player_ID'),
-    localStorage.getItem('password'), localStorage.getItem('img'), localStorage.getItem('level'),
-    localStorage.getItem('xp'), localStorage.getItem('coins'));
-
 const storeButtonClicked = () => {
   router.push('/store');
 };

@@ -133,4 +133,19 @@ input{
   color: #333;
   margin-bottom: 30px;
 }
+
+.form div {
+  margin-bottom: 30px; /* Increased separation between form elements */
+}
+
+input{
+  width: 80%;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #fff;
+  color: #333;
+  margin-bottom: 30px;
+}
 </style>

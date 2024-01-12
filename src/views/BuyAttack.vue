@@ -13,7 +13,7 @@
           <div class="item-field item-field1">{{ item.attack_ID }}</div>
           <div class="item-field item-field2">{{ item.positions }}</div>
           <div class="buttons">
-            <CustomButton type="button">{{ item.price }}$ BUY</CustomButton>
+            <CustomButton type="button" @click="() => buyButtonClicked(item.attack_ID)">{{ item.price }}$ BUY</CustomButton>
           </div>
         </div>
       </a>
@@ -26,13 +26,13 @@
 <script setup>
 import CustomButton from "./components/CustomButton.vue";
 import { ref, onMounted } from 'vue';
-import { getBuyableAttacks } from '../services/api.js';
+import {getBuyableAttacks, buyAttack} from '../services/api.js';
 
 const items = ref([]);
 
 onMounted(async () => {
   try {
-    const attacks = await getBuyableAttacks();
+    const attacks = await getBuyableAttacks(localStorage.getItem('token'));
     items.value = attacks.map(attack => ({
       attack_ID: attack.attack_ID,
       positions: attack.positions,
@@ -42,6 +42,21 @@ onMounted(async () => {
     console.error('Error fetching attacks:', error);
   }
 });
+
+const buyButtonClicked = async (attack_ID) => {
+  try {
+    const response = await buyAttack(localStorage.getItem('token'), attack_ID);
+    console.log('Buy attack API Response:', response);
+
+    if (response.error) {
+      console.error('Register failed:', response.error.message);
+    }
+  } catch (error) {
+    console.error('Error:', error);
+    console.error('Response Data:', error.response.data);
+    throw error;
+  }
+};
 </script>
 
 <style scoped>

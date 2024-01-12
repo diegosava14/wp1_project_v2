@@ -8,12 +8,12 @@
   </header>
   <main>
     <div class="form">
-      <TextInput id="name" placeholder="Name" v-model="name" />
-      <TextInput id="xCoord" placeholder="X" v-model="xCoord" />
-      <TextInput id="yCoord" placeholder="Y" v-model="yCoord" />
+      <input type="text" id="xCord" v-model="xCord" placeholder="xCord" />
+      <input type="text" id="name" v-model="name" placeholder="Name" />
+      <input type="text" id="yCord" v-model="yCord" placeholder="yCord" />
     </div>
     <div class="buttons">
-      <CustomButton type="button">CREATE</CustomButton>
+      <CustomButton type="button" @click="() => createAttackButtonClicked(name, xCord, yCord, 'public/images/fireball_image.jpg')">CREATE</CustomButton>
     </div>
   </main>
   </body>
@@ -22,12 +22,32 @@
 
 <script setup>
   import CustomButton from "./components/CustomButton.vue";
-  import TextInput from "./components/TextInput.vue";
-  import ImageButton from "./components/ImageButton.vue";
+  import {createAttack} from '../services/api.js';
+  import {ref} from "vue";
+  import router from "../router/index.js";
 
-  let name = "";
-  let xCoord = "";
-  let yCoord = "";
+  const name = ref("");
+  const xCord = ref("");
+  const yCord = ref("");
+  const createAttackButtonClicked = async (name, xCord, yCord, img) => {
+    try {
+      const token = localStorage.getItem('token');
+      const positions = '(' + xCord + ',' + yCord + ')';
+
+      const response = await createAttack(token, name, positions, img);
+      console.log('Create attack API Response:', response);
+
+      if (response.error) {
+        console.error('Create failed:', response.error.message);
+      }
+      router.push('/store');
+    } catch (error) {
+      console.error('Error:', error);
+      console.error('Response Data:', error.response.data);
+      throw error;
+    }
+  };
+
 </script>
 
 <style scoped>
@@ -72,5 +92,17 @@ body {
 
 .buttons {
   align-items: center;
+}
+
+input {
+  box-sizing: border-box; /* Ensure proper alignment */
+  width: 50%;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #fff;
+  color: #333;
+  margin-bottom: 30px;
 }
 </style>
