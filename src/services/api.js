@@ -132,7 +132,7 @@ async function getPlayerAttacks(token, id) {
 
         let response = await axios({
             method: 'get',
-            url: getUserURL,
+            url: getPlayerAttacksURL,
             headers: {
                 'Content-Type': 'application/json',
                 'Bearer' : token

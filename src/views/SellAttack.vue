@@ -61,10 +61,11 @@ const sellButtonClicked = async (attack_ID, price) => {
     const response = await sellAttack(localStorage.getItem('token'), attack_ID, numericPrice);
     console.log('Sell attack API Response:', response);
 
+    router.push('/store');
+
     if (response.error) {
       console.error('Sold failed:', response.error.message);
     } else {
-      router.push('/store');
     }
   } catch (error) {
     console.error('Error:', error);

@@ -37,7 +37,6 @@ import CustomLabel from './components/CustomLabel.vue';
 import { useRouter } from "vue-router";
 import {onMounted, ref} from "vue";
 import {
-  getAttacksAPI,
   getUserAPI,
   loginAPI,
   getUsersAPI,
