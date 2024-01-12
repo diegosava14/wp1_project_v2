@@ -11,7 +11,6 @@
     </header>
     <article>
       <div class="buttons">
-        <CustomButton type="button">PLAY</CustomButton>
         <CustomButton type="button" @click="gameFinderButtonClicked">GAME FINDER</CustomButton>
         <CustomButton type="button" @click="gameCreationButtonClicked">CREATE GAME</CustomButton>
         <CustomButton type="button">RANKING</CustomButton>

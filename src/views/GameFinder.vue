@@ -8,59 +8,106 @@
   </header>
   <main>
     <div class="buttons">
-      <CustomButton2 type="button">AVAILABLE GAMES</CustomButton2>
-      <CustomButton2 type="button">FINISHED GAMES</CustomButton2>
+      <CustomButton type="button" @click="() => availableGamesButtonClicked()">AVAILABLE GAMES</CustomButton>
+      <CustomButton type="button" @click="() => finishedGamesButtonClicked()">FINISHED GAMES</CustomButton>
       <br>
       <br>
-    </div>
-    <div class="form">
-      <ImageButton class="search" type="button" image-url="../../public/images/8666693_search_icon.svg"></ImageButton>
-      <TextInput id="date" placeholder="Date" v-model="date" />
     </div>
     <div class="scroll-list">
       <a href="#" v-for="item in items" :key="item.id">
         <div class="item-content">
-          <div class="item-field item-field1">{{ item.field1 }}</div>
-          <div class="item-field item-field2">{{ item.field2 }}</div>
+          <div class="item-field item-field1">{{ item.game_ID }}</div>
+          <div class="item-field item-field2">SIZE: {{ item.size }} HP: {{ item.HP_max }}</div>
           <div class="item-field">
-            {{ item.field3 }}
-            <br />
-            {{ item.field4 }}
+            {{ item.creation_date }}
+          </div>
+          <div class="buttons1">
+            <CustomButton type="buttons1" @click="() => joinGameButtonClicked(item.game_ID)">JOIN</CustomButton>
           </div>
         </div>
       </a>
     </div>
+
   </main>
   </body>
   </html>
 </template>
 
 <script setup>
-import TextInput from "./components/TextInput.vue";
-import CustomButton2 from "./components/CustomButton2.vue";
-import ImageButton from "./components/ImageButton.vue";
+import CustomButton from "./components/CustomButton.vue";
+import {onMounted, ref} from "vue";
+import {createGame, getAvailableGames, joinGame} from "../services/api.js";
 
-let avaliableGames = 'AVAILABLE GAMES';
-let finishedGames = 'FINISHED GAMES';
-let date = 'DATE';
+const items = ref([]);
 
-const items = [];
-let i;
-
-const randomDates = Array.from({ length: 50 }, () => {
-  const randomTime = Math.random() * Date.now();
-  const randomDate = new Date(randomTime);
-  return randomDate.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+onMounted(async () => {
+  try {
+    const games = await getAvailableGames(localStorage.getItem('token'));
+    items.value = games
+        .filter(game => !game.finished)
+        .filter(game => !game.start)
+        .map(games => ({
+      game_ID: games.game_ID,
+      size: games.size,
+      creation_date: new Date(games.creation_date).toLocaleString(),
+      HP_max: games.HP_max
+    }));
+  } catch (error) {
+    console.error('Error fetching attacks:', error);
+  }
 });
 
+const availableGamesButtonClicked = async () => {
+  try {
+    const games = await getAvailableGames(localStorage.getItem('token'));
+    items.value = games
+        .filter(game => !game.finished)
+        .filter(game => !game.start)
+        .map(games => ({
+          game_ID: games.game_ID,
+          size: games.size,
+          creation_date: new Date(games.creation_date).toLocaleString(),
+          HP_max: games.HP_max
+        }));
+  } catch (error) {
+    console.error('Error fetching attacks:', error);
+  }
+};
 
-for (i = 0; i < 50; i++) {
-  items.push({
-    id: i,
-    field1: randomDates[i],
-    field2: '1/2' + '    |    ' + '2X2' + '    |    ' + '40HP',
-  });
-}
+const joinGameButtonClicked = async (game_ID) => {
+  try {
+    const response = await joinGame(localStorage.getItem('token'), game_ID);
+
+    console.log('Create game API Response:', response);
+
+    if (response.error) {
+      console.error('Create game failed:', response.error.message);
+    } else {
+      //To modify when Oli has the gameplay working.
+      //router.push('/gamegrid');
+    }
+  } catch (error) {
+    console.error('Error:', error);
+    console.error('Response Data:', error.response?.data);
+    throw error;
+  }
+};
+
+const finishedGamesButtonClicked = async () => {
+  try {
+    const games = await getAvailableGames(localStorage.getItem('token'));
+    items.value = games
+        .filter(game => game.finished)  // Filter out finished games
+        .map(games => ({
+          game_ID: games.game_ID,
+          size: games.size,
+          creation_date: new Date(games.creation_date).toLocaleString(),
+          HP_max: games.HP_max
+        }));
+  } catch (error) {
+    console.error('Error fetching attacks:', error);
+  }
+};
 </script>
 
 <style scoped>
@@ -94,23 +141,6 @@ body {
   margin: 0 auto 30px;
 }
 
-.back {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 30px;
-  height: auto;
-  margin-top: 10px;
-  margin-left: 10px;
-}
-
-.search {
-  width: 30px;
-  height: auto;
-  margin-right: 10px;
-  margin-bottom: 20px;
-}
-
 .title{
   margin-top: 20px;
   justify-content: center;
@@ -131,13 +161,13 @@ body {
   text-decoration: none;
   border-bottom: 4px solid #133973;
   background: #EBEF25;
-  height: 60px;
+  height: 90px;
   width: 275px;
   border-radius: 15px;
 }
 
 .scroll-list a:last-child {
-  border-bottom: none; /* Remove the border from the last item */
+  border-bottom: none;
 }
 
 .scroll-list a:hover {
@@ -167,4 +197,12 @@ body {
   font-size: 1.2em;
   color: #435283;
 }
+
+.buttons1 {
+  text-align: end;
+  position: relative;
+  bottom: 0;
+  right: 0;
+}
+
 </style>

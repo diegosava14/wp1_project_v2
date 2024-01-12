@@ -169,6 +169,71 @@ async function sellAttack(token, id, price) {
     }
 }
 
+async function createGame(token, game_ID, Size, HP) {
+    try {
+        const createGameURL = url + `/arenas`;
+        console.log(createGameURL);
+        let response = await axios({
+            method: 'post',
+            url: createGameURL,
+            headers: {
+                'Content-Type': 'application/json',
+                'Bearer' : token
+            },
+            data: {
+                game_ID: game_ID,
+                size: Size,
+                HP_max: HP
+            },
+            timeout: 30000
+        });
+    } catch (error){
+        console.error('Error: ', error);
+        throw error;
+    }
+}
+
+async function getAvailableGames(token) {
+    try {
+        const getAvailableGamesURL = url + `/arenas`;
+        console.log(getAvailableGamesURL);
+
+        let response = await axios({
+            method: 'get',
+            url: getAvailableGamesURL,
+            headers: {
+                'Content-Type': 'application/json',
+                'Bearer' : token
+            },
+            timeout: 30000
+        });
+
+        return response.data;
+    } catch (error) {
+        console.error('Error:', error);
+        throw error;
+    }
+}
+
+async function joinGame(token, id) {
+    try {
+        const joinGameURL = url + '/arenas/' + id + '/play';
+        console.log(joinGameURL);
+        let response = await axios({
+            method: 'post',
+            url: joinGameURL,
+            headers: {
+                'Content-Type': 'application/json',
+                'Bearer' : token
+            },
+            timeout: 30000
+        });
+    } catch (error){
+        console.error('Error: ', error);
+        throw error;
+    }
+}
+
 async function getUserAPI(token, id) {
     try {
         const getUserURL = url + `/players/${id}`;
@@ -279,4 +344,4 @@ async function deleteUserAPI(token) {
     }
 }
 
-export { loginAPI, registerAPI, getBuyableAttacks, getPlayerAttacks, getUserAPI , getUsersAPI, deleteUserAPI, getStatsAPI, getMyAttacksAPI, buyAttack, createAttack, sellAttack};
+export { loginAPI, registerAPI, getBuyableAttacks, getPlayerAttacks, getUserAPI , getUsersAPI, deleteUserAPI, getStatsAPI, getMyAttacksAPI, buyAttack, createAttack, sellAttack, createGame, getAvailableGames, joinGame};
