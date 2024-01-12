@@ -125,14 +125,14 @@ async function createAttack(token, attack_ID, positions, img) {
     }
 }
 
-async function getAttacksAPI(token, id) {
+async function getPlayerAttacks(token, id) {
     try {
-        const getAttacksURL = url + `/players/${id}/attacks`;
-        console.log(getAttacksURL);
+        const getPlayerAttacksURL = url + `/players/${id}/attacks`;
+        console.log(getPlayerAttacksURL);
 
         let response = await axios({
             method: 'get',
-            url: getAttacksURL,
+            url: getPlayerAttacksURL,
             headers: {
                 'Content-Type': 'application/json',
                 'Bearer' : token
@@ -143,6 +143,28 @@ async function getAttacksAPI(token, id) {
         return response.data;
     } catch (error) {
         console.error('Error:', error);
+        throw error;
+    }
+}
+
+async function sellAttack(token, id, price) {
+    try {
+        const sellAttackURL = url + `/shop/attacks/${id}/sell`;
+        console.log(sellAttackURL);
+        let response = await axios({
+            method: 'post',
+            url: sellAttackURL,
+            headers: {
+                'Content-Type': 'application/json',
+                'Bearer' : token
+            },
+            data: {
+                price: price
+            },
+            timeout: 30000
+        });
+    } catch (error){
+        console.error('Error: ', error);
         throw error;
     }
 }
@@ -257,4 +279,4 @@ async function deleteUserAPI(token) {
     }
 }
 
-export { loginAPI, registerAPI, getBuyableAttacks, getAttacksAPI, getUserAPI , getUsersAPI, deleteUserAPI, getStatsAPI, getMyAttacksAPI, buyAttack, createAttack};
+export { loginAPI, registerAPI, getBuyableAttacks, getPlayerAttacks, getUserAPI , getUsersAPI, deleteUserAPI, getStatsAPI, getMyAttacksAPI, buyAttack, createAttack, sellAttack};

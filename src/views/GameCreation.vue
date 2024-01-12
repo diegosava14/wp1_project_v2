@@ -9,25 +9,32 @@
   <main>
     <div class="content">
       <div class="labels">
+        <input type="text" id="game_ID" v-model="game_ID" placeholder="Name" />
         <div class="greenRectangle">
           <CustomLabel id="Arena's size" :labelText="textArenaSize"></CustomLabel>
           <select>
             <option value="Option1">2X2</option>
             <option value="Option2">3X3</option>
             <option value="Option3">4X4</option>
+            <option value="Option1">5X5</option>
+            <option value="Option2">6X6</option>
+            <option value="Option3">7X7</option>
+            <option value="Option1">8X8</option>
+            <option value="Option2">9X9</option>
+            <option value="Option3">10X10</option>
           </select>
         </div>
         <div class="greenRectangle">
           <CustomLabel id="Player's HP" :labelText="textPlayersHP"></CustomLabel>
           <select>
-            <option value="Option1">10HP</option>
+            <option value="Option1">15HP</option>
             <option value="Option2">25HP</option>
             <option value="Option3">50HP</option>
           </select>
         </div>
       </div>
       <div class="buttons">
-        <CustomButton type="button">ENTER GAME</CustomButton>
+        <CustomButton type="button" @click="() => createGameButtonClicked()">ENTER GAME</CustomButton>
       </div>
     </div>
   </main>
@@ -38,9 +45,36 @@
 <script setup>
 import CustomButton from './components/CustomButton.vue';
 import CustomLabel from './components/CustomLabel.vue';
+import {ref} from "vue";
+import {createAttack} from "../services/api.js";
+import router from "../router/index.js";
 
 let textArenaSize = 'Arena size';
 let textPlayersHP = 'Player HP';
+
+const game_ID = ref("");
+const size = ref("");
+const maxHP = ref("");
+
+const createGameButtonClicked = async (game_ID, size, maxHP) => {
+  try {
+    const token = localStorage.getItem('token');
+    const positions = '(' + xCord + ',' + yCord + ')';
+
+    const response = await createAttack(token, name, positions, img);
+    console.log('Create attack API Response:', response);
+
+    if (response.error) {
+      console.error('Create failed:', response.error.message);
+    }
+    router.push('/store');
+  } catch (error) {
+    console.error('Error:', error);
+    console.error('Response Data:', error.response.data);
+    throw error;
+  }
+};
+
 </script>
 
 <style scoped>
@@ -123,5 +157,17 @@ select {
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+input {
+  box-sizing: border-box; /* Ensure proper alignment */
+  width: 90%;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #fff;
+  color: #333;
+  margin-bottom: 30px;
 }
 </style>
