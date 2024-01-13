@@ -46,6 +46,8 @@ import {
   buyAttack
 } from "../services/api.js";
 
+//set up variables to be used in the html
+
 let textXp = 'XP: '+localStorage.getItem('xp');
 let textLvl = 'LVL: '+localStorage.getItem('level');
 let textCoins = 'COINS: '+localStorage.getItem('coins');
@@ -56,9 +58,10 @@ const img = localStorage.getItem('img');
 
 const router = useRouter();
 
+//get the user's equipped attacks when the page is mounted
 onMounted(async () => {
   try {
-
+   //call the getMyAttacksAPI
     const response = await getMyAttacksAPI(localStorage.getItem(('token')));
 
     console.log('Register API Response:', response);
@@ -66,6 +69,7 @@ onMounted(async () => {
     if (response.error) {
       console.error('Register failed:', response.error.message);
     } else {
+      //filter by unequipped attacks
       let counter = 0;
       for (let i = 0; i < response.length; i++) {
         if(response[i].equipped == true){
@@ -81,14 +85,17 @@ onMounted(async () => {
   }
 });
 
+//back button clicked
 const backButtonClicked = () => {
   router.push('/mainmenu');
 };
 
+//backpack button clicked
 const backpackButtonClicked = () => {
   router.push('/account/backpack');
 };
 
+//equip attack button clicked, set the selected attack to the attack clicked and redirect to chooseattack
 const equipAttack1 = () => {
   localStorage.setItem('selectedAttack', attacks.value[0]);
   router.push('/account/chooseattack');
@@ -104,8 +111,11 @@ const equipAttack3 = () => {
   router.push('/account/chooseattack');
 };
 
+//delete button clicked
+
 const deleteButtonClicked = async () => {
   try {
+    //call the delete user api
     const response = await deleteUserAPI(localStorage.getItem(('token')));
     console.log('Register API Response:', response);
 
@@ -113,6 +123,7 @@ const deleteButtonClicked = async () => {
       console.error('Register failed:', response.error.message);
     } else {
       console.log('Deletion successful!');
+      //redirect to title
       router.push('/');
     }
   } catch (error) {

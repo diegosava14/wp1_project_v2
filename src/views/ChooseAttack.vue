@@ -37,12 +37,15 @@ import CustomButton from "./components/CustomButton.vue";
 
 const router = useRouter();
 
+//get the selected attack from local storage
 const selected = localStorage.getItem('selectedAttack');
 
+//set reactive variables
 let items = ref([]);
 
 onMounted(async () => {
   try {
+    //call the getMyAttacks api
     const response = await getMyAttacksAPI(localStorage.getItem(('token')));
 
     console.log('Register API Response:', response);
@@ -50,6 +53,7 @@ onMounted(async () => {
     if (response.error) {
       console.error('Register failed:', response.error.message);
     } else {
+      //set the items variable to be the response, but only if the attack is not equipped
       items.value = response.filter(attack => !attack.equipped).map(attack => ({
             id: attack.attack_ID,
             text: {
@@ -68,6 +72,7 @@ onMounted(async () => {
   }
 });
 
+//when an item is clicked, call the equipAttack api
 const itemClicked = async (event, clickedId) => {
   event.preventDefault();
 
@@ -75,8 +80,10 @@ const itemClicked = async (event, clickedId) => {
     let response;
 
     if(localStorage.getItem('selectedAttack') == 'None') {
+      //if nop attack was equipped in the slot, call the equipAttack api
       response = await equipAttack(localStorage.getItem(('token')), clickedId);
     }else{
+      //if an attack was equipped in the slot, call the swapAttack api
       response = await swapAttack(localStorage.getItem(('token')), clickedId, localStorage.getItem('selectedAttack'));
     }
 
@@ -86,6 +93,7 @@ const itemClicked = async (event, clickedId) => {
       console.error('Register failed:', response.error.message);
     } else {
       console.log('Attack equipped!');
+      //redirect to account
       router.push('/account');
     }
   } catch (error) {
@@ -97,8 +105,10 @@ const itemClicked = async (event, clickedId) => {
 
 const unequipButtonClicked = () => {
   if(localStorage.getItem('selectedAttack') == 'None') {
+    //if nop attack was equipped in the slot, redirect to account
     router.push('/account');
   }else{
+    //if an attack was equipped in the slot, call the unequipAttack api
     try {
       const response = unequipAttack(localStorage.getItem(('token')), localStorage.getItem('selectedAttack'));
       console.log('Register API Response:', response);
@@ -107,6 +117,7 @@ const unequipButtonClicked = () => {
         console.error('Register failed:', response.error.message);
       } else {
         console.log('Attack unequipped!');
+        //redirect to account
         router.push('/account');
       }
     } catch (error) {

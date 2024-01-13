@@ -32,10 +32,13 @@ import {getMyAttacksAPI} from "../services/api.js";
 
 const router = useRouter();
 
+//set reactive variables
 let items = ref([]);
 
+//when the page is mounted, call the getMyAttacks api to retrieve the attacks
 onMounted(async () => {
   try {
+    //call the getMyAttacks api
     const response = await getMyAttacksAPI(localStorage.getItem(('token')));
 
     console.log('Register API Response:', response);
@@ -43,6 +46,7 @@ onMounted(async () => {
     if (response.error) {
       console.error('Register failed:', response.error.message);
     } else {
+      //set the items variable to be the response
       items.value = response.map(attack => ({ id: attack.attack_ID,
         text: {
           attack: attack.attack_ID,

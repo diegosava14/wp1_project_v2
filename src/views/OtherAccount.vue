@@ -32,6 +32,7 @@ import {getStatsAPI, getUserAPI} from "../services/api.js";
 
 const router = useRouter();
 
+//set up variables to be used in the html
 let textXp = ref('');
 let textLvl = ref('');
 let textCoins = ref('');
@@ -40,7 +41,9 @@ let games = ref('');
 let pageTitle = localStorage.getItem('otherPlayer_ID');
 let img = ref('');
 
+//when the page is mounted, call the getUser api to retrieve the user information and the statistics
 onMounted(async () => {
+  //call the getUser api
   try {
     const response = await getUserAPI(localStorage.getItem(('token')), localStorage.getItem(('otherPlayer_ID')));
     console.log('Register API Response:', response);
@@ -48,6 +51,7 @@ onMounted(async () => {
     if (response.error) {
       console.error(response.error.message);
     } else {
+      //set the variables to be the response
       textXp.value = 'XP: ' + response.xp.toString();
       textLvl.value = 'LVL: ' + response.level.toString();
       textCoins.value = 'COINS: ' + response.coins.toString();
@@ -59,6 +63,7 @@ onMounted(async () => {
     throw error;
   }
 
+  //call the getStats api
   try {
     const response = await getStatsAPI(localStorage.getItem(('token')), localStorage.getItem(('otherPlayer_ID')));
     console.log('Register API Response:', response);
@@ -66,12 +71,14 @@ onMounted(async () => {
     if (response.error) {
       console.error(response.error.message);
     } else {
+      //calculate the win percentage
       let percentage = (response.games_won/response.games_played*100);
 
       if (isNaN(percentage)){
         percentage = 0;
       }
 
+      //set the variables to be the response
       wins.value = "WON: "+ percentage.toString() + "%";
       games.value = "Finished Games: "+response.games_played.toString();
     }

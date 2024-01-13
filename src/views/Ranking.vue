@@ -26,8 +26,10 @@ import {getUsersAPI} from "../services/api.js";
 
 const router = useRouter();
 
+//set reactive variables
 let items = ref([]);
 
+//when the page is mounted, call the getUsers api to retrieve the users
 onMounted(async () => {
   try {
     const response = await getUsersAPI(localStorage.getItem(('token')));
@@ -37,6 +39,7 @@ onMounted(async () => {
       console.error(response.error.message);
     } else {
       console.log('Get Users successful!');
+      //set the items variable to be the response
       items.value = response.map(user => ({ id: user.player_ID, text: `${user.player_ID}` }));
     }
   } catch (error) {
@@ -50,9 +53,11 @@ const backButtonClicked = () => {
   router.push('/mainmenu');
 };
 
+//when an item is clicked, set the otherPlayer_ID in local storage and go to the otheraccount page
 const itemClicked = (event, clickedId) => {
   event.preventDefault();
   localStorage.setItem('otherPlayer_ID', clickedId);
+  //go to the otheraccount page
   router.push('/otheraccount');
 };
 </script>

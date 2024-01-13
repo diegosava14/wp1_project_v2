@@ -41,6 +41,8 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import ImageButton from "./components/ImageButton.vue";
 
+//set up variables to be used in the html
+
 const username = ref('');
 const password = ref('');
 let selectedOption = ref('');
@@ -49,6 +51,7 @@ const router = useRouter();
 
 const createButtonClicked = async () => {
   try {
+    //call the register api
     const response = await registerAPI(username.value, password.value, selectedOption.value);
     console.log('Register API Response:', response);
 
@@ -57,12 +60,15 @@ const createButtonClicked = async () => {
     } else {
       console.log('Registration successful!');
 
+      //if successful, call the login api
       try {
+        //call the login api
         const response2 = await loginAPI(username.value, password.value);
 
         if (response2.error) {
           console.error('Login failed:', response2.error.message);
         } else {
+          //save the player_ID, password, img, level, xp, coins, and token to local storage
           const player_ID = response2.player_ID;
           const password = response2.password;
           const img = response2.img;
@@ -80,6 +86,7 @@ const createButtonClicked = async () => {
           localStorage.setItem('token', token);
 
           console.log('Login successful!');
+          //redirect to mainmenu
           router.push('/mainmenu');
         }
       }catch (error) {

@@ -30,15 +30,19 @@ const password = ref('');
 
 const router = useRouter();
 
+//join button clicked
+
 const joinButtonClicked = async () => {
   console.log(username.value, password.value);
   try {
+    //call the login api
     const response = await loginAPI(username.value, password.value);
     console.log('Register API Response:', response);
 
     if (response.error) {
       console.error('Register failed:', response.error.message);
     } else {
+      //save the player_ID, password, img, level, xp, coins, and token to local storage
       const player_ID = response.player_ID;
       const password = response.password;
       const img = response.img;
@@ -56,6 +60,8 @@ const joinButtonClicked = async () => {
       localStorage.setItem('token', token);
 
       console.log('Login successful!');
+
+      //redirect to mainmenu
       router.push('/mainmenu');
     }
   } catch (error) {

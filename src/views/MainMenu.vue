@@ -26,8 +26,13 @@ import CustomButton from './components/CustomButton.vue';
 import ImageButton from "./components/ImageButton.vue";
 import {useRouter} from "vue-router";
 
+//router is used to navigate between pages
+
 const router = useRouter();
+
+//functions to navigate to other pages
 const gameCreationButtonClicked = () => {
+  //router.push() is used to navigate to other pages
   router.push('/gamecreation');
 };
 const gameFinderButtonClicked = () => {
