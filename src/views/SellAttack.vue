@@ -132,7 +132,7 @@ body {
 }
 
 input {
-  box-sizing: border-box; /* Ensure proper alignment */
+  box-sizing: border-box;
   width: 70%;
   padding: 10px;
   font-size: 16px;

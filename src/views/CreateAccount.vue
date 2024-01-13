@@ -41,7 +41,6 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import ImageButton from "./components/ImageButton.vue";
 
-// Define reactive data properties
 const username = ref('');
 const password = ref('');
 let selectedOption = ref('');

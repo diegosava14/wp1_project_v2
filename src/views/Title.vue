@@ -120,7 +120,7 @@ main{
 }
 
 .form div {
-  margin-bottom: 30px; /* Increased separation between form elements */
+  margin-bottom: 30px;
 }
 
 input{
@@ -135,7 +135,7 @@ input{
 }
 
 .form div {
-  margin-bottom: 30px; /* Increased separation between form elements */
+  margin-bottom: 30px;
 }
 
 input{

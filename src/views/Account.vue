@@ -198,7 +198,7 @@ select{
 }
 
 .image {
-  text-align: center; /* Center the content inside the .image div */
+  text-align: center;
   margin-bottom: 30px;
 }
 
