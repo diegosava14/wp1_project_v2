@@ -1,7 +1,6 @@
 <template>
   <section>
     <nav>
-      <button>&larr;</button>
       <time datetime="2023-11-07">7/11/23</time>
     </nav>
     <article>
@@ -26,43 +25,123 @@
         <div class="player" v-for="(player, index) in players" :key="player.name">
           <h2 :class="{'player-name-green': index === 0, 'player-name-red': index === 1}">{{ player.name }}</h2>
           <progress :value="player.hp" max="30"></progress>
-          <span>{{ player.hp }}/30HP</span>
+          <span>{{ player.hp }}/50HP</span>
+          <ol>
+            <li v-for="attack in player.attacks" :key="attack" @click="attackClicked(attack, player)">
+              {{ attack }}
+            </li>
+          </ol>
         </div>
       </div>
-      <ol>
-        <CustomButton type="button">PLAY</CustomButton>
-      </ol>
+      <button class="leave-game-button" @click="leaveGame()" > Leave Game </button>
     </footer>
   </section>
 </template>
 
 <script>
+import { ref } from "vue";
+import { getCurrentGame, leaveGame } from "../services/api.js";
+import router from "../router/index.js";
 
-import CustomButton from "./components/CustomButton.vue";
-
-/* here we should load the record from memory and play it after user presses play*/
 export default {
+  data() {
+    return {
+      gameId: null,
+      size: null,
+      creationDate: null,
+      finished: null,
+      HPMax: null,
+      start: null,
+      playersGames: [],
+    };
+  },
+  async created() {
+    await this.initializeGameData();
+  },
 
-  name: 'Game',
-  components: {CustomButton},
   data() {
     return {
       grid: this.createGrid(10, 10),
       players: [
-        { name: 'MANOLITO', hp: 30, position: { x: 1, y: 1 }, direction: 'right', rotation: 90,},
-        { name: 'PEPITTtO', hp: 30, position: { x: 3, y: 5 }, direction: 'down',  rotation: 270,},
+        { name: 'MELONITO', hp: 25, attacks: ['Fireball2', 'Magic Flush2', 'Pit of Doom2'], position: { x: 1, y: 1 }, direction: 'right', rotation: 0,},
+        { name: 'PEPITO', hp: 10, attacks: ['Wing', 'Kick', 'Teleport'], position: { x: 8, y: 8 }, direction: 'down',  rotation: 270,},
       ],
 
     };
   },
 
-
-
   methods: {
+    async initializeGameData() {
+      const token = localStorage.getItem('token');
+      try {
+        const gameDataArray = await getCurrentGame(token);
+        if (gameDataArray && gameDataArray.length > 0) {
+          const gameData = gameDataArray[0];
+          this.gameId = gameData.game_ID;
+          this.size = gameData.size;
+          this.creationDate = new Date(gameData.creation_date);
+          this.finished = gameData.finished;
+          this.HPMax = gameData.HP_max;
+          this.start = gameData.start;
+          this.playersGames = gameData.players_games;
+
+          this.createGrid(this.size, this.size);
+
+        } else {
+          console.error('Failed to fetch game data or data is empty');
+        }
+      } catch (error) {
+        console.error('Error initializing game data:', error);
+      }
+    },
+
+
+    leaveGame(){
+      const token = localStorage.getItem('token');
+
+      const response1 = leaveGame(token, this.gameId);
+
+      console.log('Leave game API Response:', response1);
+
+      if (response1.error) {
+        console.error('Leave game failed:', response1.error.message);
+      } else {
+        router.push('/mainmenu');
+      }
+
+    },
+
     createGrid(rows, cols) {
       return Array.from({ length: rows }, () => Array.from({ length: cols }, () => false));
     },
 
+    movePlayer(direction, playerIndex) {
+      const player = this.players[playerIndex];
+      const currentDirection = this.getDirectionFromRotation(player.rotation);
+
+      //move
+      if (currentDirection === direction) {
+        const directionOffsets = {
+          right: { x: 1, y: 0 },
+          up: { x: 0, y: -1 },
+          down: { x: 0, y: 1 },
+          left: { x: -1, y: 0 },
+        };
+
+        //makes sure  player stays within the boundaries
+        const newX = player.position.x + directionOffsets[direction].x;
+        const newY = player.position.y + directionOffsets[direction].y;
+
+        if (newX >= 0 && newX < this.grid[0].length && newY >= 0 && newY < this.grid.length) {
+          player.position.x = newX;
+          player.position.y = newY;
+        }
+      } else {
+        //rotate
+        const rotations = { right: 0, up: 270, left: 180, down: 90 };
+        player.rotation = rotations[direction];
+      }
+    },
 
     //checks either of the player's highlighted cells
     isCellActiveForAnyPlayer(cellX, cellY) {
@@ -97,12 +176,29 @@ export default {
       return directions[rotation];
     },
 
+    attackClicked(attack, player) {
+      if (attack === "Fireball1"){
+        player.position.y++;
+        player.position.x += 3;
+
+      } else if (attack === "Pit of Doom"){
+        player.position.y -= 2;
+        player.position.x ++;
+      }
+
+    },
   },
 };
 </script>
 
 
 <style scoped>
+
+
+ol li {
+  cursor: pointer;
+}
+
 
 section {
   background: #133973;
@@ -190,6 +286,21 @@ progress {
   max-width: 100%;
   max-height: 100%;
   display: block;
+}
+
+.leave-game-button {
+  background-color: #EBEF25;
+  color: #133973;
+  padding: 10px 20px;
+  margin-top: 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.leave-game-button:hover {
+  background-color: #d9534f;
 }
 
 

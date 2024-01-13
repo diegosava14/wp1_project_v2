@@ -69,7 +69,7 @@
     return {
       grid: this.createGrid(10, 10),
       players: [
-        { name: 'MANOLITO', hp: 25, attacks: ['Fireball1', 'Attackk2', 'Pit of Doom'], position: { x: 1, y: 1 }, direction: 'right', rotation: 0,},
+        { name: 'MELONITO', hp: 25, attacks: ['Fireball2', 'Magic Flush2', 'Pit of Doom2'], position: { x: 1, y: 1 }, direction: 'right', rotation: 0,},
         { name: 'PEPITO', hp: 10, attacks: ['Wing', 'Kick', 'Teleport'], position: { x: 8, y: 8 }, direction: 'down',  rotation: 270,},
       ],
 

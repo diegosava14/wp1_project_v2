@@ -78,14 +78,14 @@ const availableGamesButtonClicked = async () => {
 const joinGameButtonClicked = async (game_ID) => {
   try {
     const response = await joinGame(localStorage.getItem('token'), game_ID);
-    router.push('/gamereplay');
 
+    router.push('/replay');
     console.log('Create game API Response:', response);
 
     if (response.error) {
       console.error('Create game failed:', response.error.message);
     } else {
-      router.push('/gamereplay');
+      router.push('/replay');
     }
   } catch (error) {
     console.error('Error:', error);

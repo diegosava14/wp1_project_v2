@@ -119,7 +119,7 @@ const routes = [
         component: GameGrid,
     },
     {
-        path: '/gamereplay',
+        path: '/replay',
         name: 'game replay',
         component: GameReplay,
     },
