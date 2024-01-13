@@ -49,6 +49,7 @@
   import { getCurrentGame, leaveGame } from "../services/api.js";
   import router from "../router/index.js";
 
+  //this data would be used if the api would be functional
   export default {
     data() {
       return {
@@ -65,11 +66,12 @@
     await this.initializeGameData();
   },
 
+    //data to hardcore the initialisation
   data() {
     return {
       grid: this.createGrid(10, 10),
       players: [
-        { name: 'MELONITO', hp: 25, attacks: ['Fireball2', 'Magic Flush2', 'Pit of Doom2'], position: { x: 1, y: 1 }, direction: 'right', rotation: 0,},
+        { name: 'MELONITO', hp: 25, attacks: ['Fireball', 'Magic Flush', 'Pit of Doom'], position: { x: 1, y: 1 }, direction: 'right', rotation: 0,},
         { name: 'PEPITO', hp: 10, attacks: ['Wing', 'Kick', 'Teleport'], position: { x: 8, y: 8 }, direction: 'down',  rotation: 270,},
       ],
 
@@ -77,6 +79,8 @@
   },
 
   methods: {
+
+      //this function would work with API calls to build the screen using the API info
     async initializeGameData() {
       const token = localStorage.getItem('token');
       try {
@@ -101,7 +105,7 @@
       }
     },
 
-
+    //allows user to exit the game
     leaveGame(){
       const token = localStorage.getItem('token');
 
@@ -117,10 +121,12 @@
 
     },
 
+    //initialises the playing grid
     createGrid(rows, cols) {
       return Array.from({ length: rows }, () => Array.from({ length: cols }, () => false));
     },
 
+    //controlls player's movements
     movePlayer(direction, playerIndex) {
       const player = this.players[playerIndex];
       const currentDirection = this.getDirectionFromRotation(player.rotation);
@@ -182,8 +188,9 @@
       return directions[rotation];
     },
 
+    //action performed when attacks gets used (right now is hardcoded)
     attackClicked(attack, player) {
-      if (attack === "Fireball1"){
+      if (attack === "Fireball"){
         player.position.y++;
         player.position.x += 3;
 
@@ -191,6 +198,8 @@
         player.position.y -= 2;
         player.position.x ++;
       }
+
+      //Should decrease the health if attack is successful
 
     },
   },

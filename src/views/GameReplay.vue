@@ -44,6 +44,7 @@ import { getCurrentGame, leaveGame } from "../services/api.js";
 import router from "../router/index.js";
 
 export default {
+  //this data would be used if the api would be functional
   data() {
     return {
       gameId: null,
@@ -59,6 +60,7 @@ export default {
     await this.initializeGameData();
   },
 
+  //data to hardcore the initialisation
   data() {
     return {
       grid: this.createGrid(10, 10),
@@ -71,6 +73,8 @@ export default {
   },
 
   methods: {
+
+    //this function would work with API calls to build the screen using the API info
     async initializeGameData() {
       const token = localStorage.getItem('token');
       try {
@@ -95,7 +99,7 @@ export default {
       }
     },
 
-
+    //allows user to exit the game
     leaveGame(){
       const token = localStorage.getItem('token');
 
@@ -111,10 +115,12 @@ export default {
 
     },
 
+    //initialises the playing grid
     createGrid(rows, cols) {
       return Array.from({ length: rows }, () => Array.from({ length: cols }, () => false));
     },
 
+    //controls player's movements
     movePlayer(direction, playerIndex) {
       const player = this.players[playerIndex];
       const currentDirection = this.getDirectionFromRotation(player.rotation);
@@ -176,15 +182,10 @@ export default {
       return directions[rotation];
     },
 
+    //action performed when attacks gets used (right now is hardcoded)
     attackClicked(attack, player) {
-      if (attack === "Fireball1"){
-        player.position.y++;
-        player.position.x += 3;
-
-      } else if (attack === "Pit of Doom"){
-        player.position.y -= 2;
-        player.position.x ++;
-      }
+      //This should withdraw the attack from the API from the actual gameplay recorded
+      //Should decrease the health if attack is successful
 
     },
   },
