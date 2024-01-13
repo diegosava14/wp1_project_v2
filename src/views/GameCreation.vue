@@ -48,6 +48,7 @@ import CustomLabel from './components/CustomLabel.vue';
 import { ref } from "vue";
 import { createGame } from "../services/api.js";
 import router from "../router/index.js";
+import gameGrid from "./GameGrid.vue";
 
 let textArenaSize = 'Arena size';
 let textPlayersHP = 'Player HP';
@@ -66,6 +67,8 @@ const createGameButtonClicked = async (game_ID, selectedSize, selectedHP) => {
     console.log(numericSize);
     console.log(numericHP);
 
+    router.push('/game');
+
     const response = await createGame(token, game_ID, numericSize, numericHP);
 
     console.log('Create game API Response:', response);
@@ -73,8 +76,8 @@ const createGameButtonClicked = async (game_ID, selectedSize, selectedHP) => {
     if (response.error) {
       console.error('Create game failed:', response.error.message);
     } else {
-      //To modify when Oli has the gameplay working.
-      //router.push('/gamegrid');
+      gameGrid.init(game_ID, numericSize, numericHP);
+      router.push('/game');
     }
   } catch (error) {
     console.error('Error:', error);

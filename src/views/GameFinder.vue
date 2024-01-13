@@ -37,6 +37,7 @@
 import CustomButton from "./components/CustomButton.vue";
 import {onMounted, ref} from "vue";
 import {createGame, getAvailableGames, joinGame} from "../services/api.js";
+import router from "../router/index.js";
 
 const items = ref([]);
 
@@ -77,14 +78,14 @@ const availableGamesButtonClicked = async () => {
 const joinGameButtonClicked = async (game_ID) => {
   try {
     const response = await joinGame(localStorage.getItem('token'), game_ID);
+    router.push('/gamereplay');
 
     console.log('Create game API Response:', response);
 
     if (response.error) {
       console.error('Create game failed:', response.error.message);
     } else {
-      //To modify when Oli has the gameplay working.
-      //router.push('/gamegrid');
+      router.push('/gamereplay');
     }
   } catch (error) {
     console.error('Error:', error);

@@ -1,7 +1,6 @@
 <template>
   <section>
     <nav>
-      <button>&larr;</button>
       <time datetime="2023-11-07">7/11/23</time>
     </nav>
     <article>
@@ -26,9 +25,9 @@
         <div class="player" v-for="(player, index) in players" :key="player.name">
           <h2 :class="{'player-name-green': index === 0, 'player-name-red': index === 1}">{{ player.name }}</h2>
           <progress :value="player.hp" max="30"></progress>
-          <span>{{ player.hp }}/30HP</span>
+          <span>{{ player.hp }}/50HP</span>
           <ol>
-            <li v-for="attack in player.attacks" :key="attack" @click="attackClicked(attack)">
+            <li v-for="attack in player.attacks" :key="attack" @click="attackClicked(attack, player)">
               {{ attack }}
             </li>
           </ol>
@@ -40,28 +39,84 @@
           </div>
         </div>
       </div>
+      <button class="leave-game-button" @click="leaveGame()" > Leave Game </button>
     </footer>
   </section>
 </template>
 
 <script>
+  import { ref } from "vue";
+  import { getCurrentGame, leaveGame } from "../services/api.js";
+  import router from "../router/index.js";
 
-//init data to display
-export default {
+  export default {
+    data() {
+      return {
+      gameId: null,
+      size: null,
+      creationDate: null,
+      finished: null,
+      HPMax: null,
+      start: null,
+      playersGames: [],
+    };
+  },
+  async created() {
+    await this.initializeGameData();
+  },
 
-  name: 'Game',
   data() {
     return {
       grid: this.createGrid(10, 10),
       players: [
-        { name: 'MANOLITO', hp: 25, attacks: ['Fireball', 'Magic Shield', 'Pit of Doom'], position: { x: 1, y: 1 }, direction: 'right', rotation: 180,},
-        { name: 'PEPITO', hp: 10, attacks: ['Fireball', 'Magic Shield', 'Pit of Doom'], position: { x: 8, y: 8 }, direction: 'down',  rotation: 270,},
+        { name: 'MANOLITO', hp: 25, attacks: ['Fireball1', 'Attackk2', 'Pit of Doom'], position: { x: 1, y: 1 }, direction: 'right', rotation: 0,},
+        { name: 'PEPITO', hp: 10, attacks: ['Wing', 'Kick', 'Teleport'], position: { x: 8, y: 8 }, direction: 'down',  rotation: 270,},
       ],
 
     };
   },
 
   methods: {
+    async initializeGameData() {
+      const token = localStorage.getItem('token');
+      try {
+        const gameDataArray = await getCurrentGame(token);
+        if (gameDataArray && gameDataArray.length > 0) {
+          const gameData = gameDataArray[0];
+          this.gameId = gameData.game_ID;
+          this.size = gameData.size;
+          this.creationDate = new Date(gameData.creation_date);
+          this.finished = gameData.finished;
+          this.HPMax = gameData.HP_max;
+          this.start = gameData.start;
+          this.playersGames = gameData.players_games;
+
+          this.createGrid(this.size, this.size);
+
+        } else {
+          console.error('Failed to fetch game data or data is empty');
+        }
+      } catch (error) {
+        console.error('Error initializing game data:', error);
+      }
+    },
+
+
+    leaveGame(){
+      const token = localStorage.getItem('token');
+
+      const response1 = leaveGame(token, this.gameId);
+
+      console.log('Leave game API Response:', response1);
+
+      if (response1.error) {
+        console.error('Leave game failed:', response1.error.message);
+      } else {
+        router.push('/mainmenu');
+      }
+
+    },
+
     createGrid(rows, cols) {
       return Array.from({ length: rows }, () => Array.from({ length: cols }, () => false));
     },
@@ -127,8 +182,16 @@ export default {
       return directions[rotation];
     },
 
-    attackClicked(attack) {
-      ///What happens when the attack gets clicked onto
+    attackClicked(attack, player) {
+      if (attack === "Fireball1"){
+        player.position.y++;
+        player.position.x += 3;
+
+      } else if (attack === "Pit of Doom"){
+        player.position.y -= 2;
+        player.position.x ++;
+      }
+
     },
   },
 };
@@ -266,6 +329,22 @@ progress {
   align-items: center;
   color: #133973;
 }
+
+.leave-game-button {
+  background-color: #EBEF25;
+  color: #133973;
+  padding: 10px 20px;
+  margin-top: 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.leave-game-button:hover {
+  background-color: #d9534f;
+}
+
 
 </style>
 

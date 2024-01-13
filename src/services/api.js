@@ -388,6 +388,57 @@ async function unequipAttack(token, unequip_id) {
     }
 }
 
+async function leaveGame(token){
+    try {
+
+        await getCurrentGame(token);
+
+
+        const leaveGameURL = url + `/arenas/${game_ID}/play`;
+        console.log(token);
+
+        let response = await axios({
+            method: 'delete',
+            url: leaveGameURL,
+            headers: {
+                'Content-Type': 'application/json',
+                'Bearer' : token
+            },
+            timeout: 30000
+        });
+
+        return response.data;
+    } catch (error) {
+        console.error('Error:', error);
+        throw error;
+    }
+}
+
+async function getCurrentGame(token){
+    try {
+        const getCurrentGameURL = url + `/players/arenas/current`;
+        console.log(token);
+
+        let response = await axios({
+            method: 'get',
+            url: getCurrentGameURL,
+            headers: {
+                'Content-Type': 'application/json',
+                'Bearer' : token
+            },
+            timeout: 30000
+        });
+
+        return response.data;
+    } catch (error) {
+        console.error('Error:', error);
+        throw error;
+    }
+
+
+}
+
+
 async function sellAttack(token, id, price) {
     try {
         const sellAttackURL = url + `/shop/attacks/${id}/sell`;
@@ -411,4 +462,4 @@ async function sellAttack(token, id, price) {
 }
 
 
-export { loginAPI, registerAPI, getBuyableAttacks, getPlayerAttacks, getUserAPI , getUsersAPI, deleteUserAPI, getStatsAPI, getMyAttacksAPI, buyAttack, createAttack, sellAttack, createGame, getAvailableGames, joinGame, equipAttack, swapAttack, unequipAttack};
+export { loginAPI, leaveGame, getCurrentGame, registerAPI, getBuyableAttacks, getPlayerAttacks, getUserAPI , getUsersAPI, deleteUserAPI, getStatsAPI, getMyAttacksAPI, buyAttack, createAttack, sellAttack, createGame, getAvailableGames, joinGame, equipAttack, swapAttack, unequipAttack};
