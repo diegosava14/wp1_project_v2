@@ -8,8 +8,8 @@
   </header>
   <main>
     <div class="labels">
-      <CustomLabel id="Xp" :labelText="totalGames"></CustomLabel>
-      <CustomLabel id="Lvl" :labelText="winrate"></CustomLabel>
+      <CustomLabel id="Xp" :labelText="games_played"></CustomLabel>
+      <CustomLabel id="Lvl" :labelText="games_won"></CustomLabel>
     </div>
     <div class="scroll-list">
       <a href="#" v-for="item in items" :key="item.id">
@@ -44,8 +44,11 @@ onMounted(async () => {
     games_played.value = 'TOTAL GAMES: ' + statistics.games_played;
     games_won.value = 'GAMES WON: ' + statistics.games_won;
 
-let totalGames = 'TOTAL GAMES = 85';
-let winrate = 'WINRATE 58,67%';
+  } catch (error) {
+    console.error('Error fetching attacks:', error);
+  }
+
+});
 
 const items = [];
 let i;
