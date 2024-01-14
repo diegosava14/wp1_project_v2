@@ -31,6 +31,18 @@
 
 <script setup>
 import CustomLabel from "./components/CustomLabel.vue";
+import {onMounted, ref} from "vue";
+import {getStatisticsAPI} from "../services/api.js";
+
+const games_played = ref('');
+const games_won = ref('');
+
+onMounted(async () => {
+  try {
+    const statistics = await getStatisticsAPI(localStorage.getItem('token'));
+
+    games_played.value = 'TOTAL GAMES: ' + statistics.games_played;
+    games_won.value = 'GAMES WON: ' + statistics.games_won;
 
 let totalGames = 'TOTAL GAMES = 85';
 let winrate = 'WINRATE 58,67%';

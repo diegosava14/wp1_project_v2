@@ -3,8 +3,7 @@
   <body>
   <div class="container">
     <div class="actionButtons">
-      <ImageButton class="account" type="button" image-url="./images/account_circle_FILL0_wght400_GRAD0_opsz24.svg"></ImageButton>
-    </div>
+      <ImageButton class="account" type="button" @click="accountButtonClicked" image-url="/images/account_circle_FILL0_wght400_GRAD0_opsz24.svg"></ImageButton>    </div>
     <div class="title">
       <h1>STORE</h1>
     </div>
@@ -34,6 +33,9 @@ const sellButtonClicked = () => {
 };
 const buyButtonClicked = () => {
   router.push('/store/buyattack');
+};
+const accountButtonClicked = () => {
+  router.push('/account');
 };
 
 </script>

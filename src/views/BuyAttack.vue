@@ -27,6 +27,7 @@
 import CustomButton from "./components/CustomButton.vue";
 import { ref, onMounted } from 'vue';
 import {getBuyableAttacks, buyAttack} from '../services/api.js';
+import router from "../router/index.js";
 
 const items = ref([]);
 
@@ -50,6 +51,8 @@ const buyButtonClicked = async (attack_ID) => {
 
     if (response.error) {
       console.error('Register failed:', response.error.message);
+    } else {
+      router.push('/store');
     }
   } catch (error) {
     console.error('Error:', error);

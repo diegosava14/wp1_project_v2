@@ -278,6 +278,28 @@ async function getStatsAPI(token, id) {
     }
 }
 
+async function getStatisticsAPI(token) {
+    try {
+        const getStatisticsURL = url + `/players/statistics`;
+        console.log(getStatisticsURL);
+
+        let response = await axios({
+            method: 'get',
+            url: getStatisticsURL,
+            headers: {
+                'Content-Type': 'application/json',
+                'Bearer' : token
+            },
+            timeout: 30000
+        });
+
+        return response.data;
+    } catch (error) {
+        console.error('Error:', error);
+        throw error;
+    }
+}
+
 async function getMyAttacksAPI(token) {
     try {
         const getUserURL = url + `/players/attacks`;
@@ -462,4 +484,4 @@ async function sellAttack(token, id, price) {
 }
 
 
-export { loginAPI, leaveGame, getCurrentGame, registerAPI, getBuyableAttacks, getPlayerAttacks, getUserAPI , getUsersAPI, deleteUserAPI, getStatsAPI, getMyAttacksAPI, buyAttack, createAttack, sellAttack, createGame, getAvailableGames, joinGame, equipAttack, swapAttack, unequipAttack};
+export { loginAPI, leaveGame, getCurrentGame, registerAPI, getBuyableAttacks, getPlayerAttacks, getUserAPI , getUsersAPI, deleteUserAPI, getStatsAPI, getMyAttacksAPI, buyAttack, createAttack, sellAttack, createGame, getAvailableGames, joinGame, equipAttack, swapAttack, unequipAttack, getStatisticsAPI};
